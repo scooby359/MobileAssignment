@@ -8,8 +8,10 @@
     tools:context="net.cwalton.mobileassignment.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hellow World :("/>
+   <fragment
+       android:name="net.cwalton.mobileassignment.FragmentHome"
+       android:id="@+id/fragment_holder"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       />
 </android.support.constraint.ConstraintLayout>
