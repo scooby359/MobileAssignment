@@ -1,8 +1,20 @@
 <resources>
-    <string name="app_name">MobileAssignment</string>
+    <string name="app_name">Travel Guide</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+    <!-- Nav Bar -->
+    <string name="nav_bar_home">Home</string>
+    <string name="nav_bar_countries">Countries</string>
+    <string name="nav_bar_cities">Cities</string>
+    <string name="nav_bar_settings">Settings</string>
+    <string name="nav_bar_temp">Temperature</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
 </resources>
