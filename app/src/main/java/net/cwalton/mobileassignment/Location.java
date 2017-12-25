@@ -6,15 +6,19 @@ package net.cwalton.mobileassignment;
 
 public abstract class Location {
 
-    public enum locationType {country, city};
+    public static final String LOC_TYPE_CITY = "city";
+    public static final String LOC_TYPE_COUNTRY = "country";
+    public static final String LOC_FAV_TRUE = "true";
+    public static final String LOC_FAV_FALSE = "false";
+
 
     private String mName;
-    private locationType mType;
+    private String mType;
     private String mWikiUrl;
     private Boolean mFavourite;
     private String mNotes;
 
-    public Location(String mName, locationType mType, String mWikiUrl) {
+    public Location(String mName, String mType, String mWikiUrl) {
 
         this.mName = mName;
         this.mType = mType;
@@ -30,11 +34,11 @@ public abstract class Location {
         this.mName = mName;
     }
 
-    public locationType getmType() {
+    public String getmType() {
         return mType;
     }
 
-    public void setmType(locationType mType) {
+    public void setmType(String mType) {
         this.mType = mType;
     }
 

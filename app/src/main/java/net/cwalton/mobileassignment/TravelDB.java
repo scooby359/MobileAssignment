@@ -1,8 +1,11 @@
 package net.cwalton.mobileassignment;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Created by scoob on 24/12/2017.
@@ -13,6 +16,8 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 
 public class TravelDB extends SQLiteOpenHelper {
+
+    private static final String LOG_TAG = "TravelDB";
 
     public static final String DATABASE_NAME = "travelDB";
     public static final int DATABASE_VERSION = 1;
@@ -45,6 +50,7 @@ public class TravelDB extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
+        //Create Countries table
         sqLiteDatabase.execSQL("" +
                 "CREATE TABLE " + TABLE_COUNTRIES + "(" +
                 "_id integer PRIMARY KEY," +
@@ -58,6 +64,7 @@ public class TravelDB extends SQLiteOpenHelper {
                 COLUMN_COUNTRY_NOTES + " TEXT" +
                 ");");
 
+        //Create Cities table
         sqLiteDatabase.execSQL("" +
                 "CREATE TABLE " + TABLE_CITIES + "(" +
                 "_id integer PRIMARY KEY," +
@@ -65,11 +72,59 @@ public class TravelDB extends SQLiteOpenHelper {
                 COLUMN_CITY_TYPE + " TEXT," +
                 COLUMN_CITY_URL + " TEXT," +
                 COLUMN_CITY_COUNTRY + " TEXT," +
-                COLUMN_CITY_POPULATION + " integer," +
+                COLUMN_CITY_POPULATION + " TEXT," +
                 COLUMN_CITY_AIRPORT + " TEXT," +
                 COLUMN_CITY_FAVOURITE + " TEXT," +
                 COLUMN_CITY_NOTES + " TEXT" +
                 ");");
+
+        //Create instance of initial data class and get arrays of countries and cities from it
+        InitialData data = new InitialData();
+        Country[] countries = data.getInitialCountries();
+        City[] cities = data.getInitialCities();
+
+        //Populate DB with initial data
+        //populate country data
+        for (int i = 0; i < data.getNUM_COUNTRIES(); i++){
+
+            ContentValues values = new ContentValues();
+            values.put(COLUMN_COUNTY_NAME, countries[i].getmName());
+            values.put(COLUMN_COUNTRY_TYPE, countries[i].getmType());
+            values.put(COLUMN_COUNTRY_URL, countries[i].getmWikiUrl());
+            values.put(COLUMN_COUNTRY_CURRENCY, countries[i].getmCurrency());
+            values.put(COLUMN_COUNTRY_LANGUAGE, countries[i].getmLanguage());
+            values.put(COLUMN_COUNTRY_CAPITAL, countries[i].getmCapital());
+            values.put(COLUMN_COUNTRY_FAVOURITE, Location.LOC_FAV_FALSE);
+            values.put(COLUMN_COUNTRY_NOTES, "");
+            long id = sqLiteDatabase.insert(TABLE_COUNTRIES, null, values);
+            if (id >= 0){
+                Log.d(LOG_TAG, "Country record created. ID: " + id);
+            }
+            else{
+                Log.d(LOG_TAG, "Error creating country record");
+            }
+
+        }
+
+        //Populate city data
+        for (int i = 0; i < data.getNUM_CITIES(); i++){
+            ContentValues values = new ContentValues();
+            values.put(COLUMN_CITY_NAME, cities[i].getmName());
+            values.put(COLUMN_CITY_TYPE, cities[i].getmType());
+            values.put(COLUMN_CITY_URL, cities[i].getmWikiUrl());
+            values.put(COLUMN_CITY_COUNTRY, cities[i].getmCountry());
+            values.put(COLUMN_CITY_POPULATION, cities[i].getmPopulation());
+            values.put(COLUMN_CITY_AIRPORT, cities[i].getmAirport());
+            values.put(COLUMN_CITY_FAVOURITE, Location.LOC_FAV_FALSE);
+            values.put(COLUMN_CITY_NOTES, "");
+            long id = sqLiteDatabase.insert(TABLE_CITIES, null, values);
+            if (id >= 0){
+                Log.d(LOG_TAG, "City record created. ID: " + id);
+            }
+            else{
+                Log.d(LOG_TAG, "Error creating city record");
+            }
+        }
 
     }
 
@@ -78,22 +133,94 @@ public class TravelDB extends SQLiteOpenHelper {
 
     }
 
-    public void saveCountry(){
-        //todo add savecountry method
+    public void testDatabase(){
+
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+
+        /*
+        String query = "SELECT * FROM " + TABLE_COUNTRIES + ";";
+
+        Cursor response =  sqLiteDatabase.rawQuery(query, null);
+        response.moveToFirst();
+
+        int index = response.getColumnIndexOrThrow(COLUMN_COUNTY_NAME);
+        String name = response.getString(index);
+
+        index = response.getColumnIndexOrThrow(COLUMN_COUNTRY_TYPE);
+        String type = response.getString(index);
+
+        index = response.getColumnIndexOrThrow(COLUMN_COUNTRY_URL);
+        String url = response.getString(index);
+
+        index = response.getColumnIndexOrThrow(COLUMN_COUNTRY_CURRENCY);
+        String currency = response.getString(index);
+
+        index = response.getColumnIndexOrThrow(COLUMN_COUNTRY_LANGUAGE);
+        String language = response.getString(index);
+
+        index = response.getColumnIndexOrThrow(COLUMN_COUNTRY_CAPITAL);
+        String capital = response.getString(index);
+
+        Country test = new Country(name, type, url, currency, language, capital);
+        test.printToLog();
+        */
+
     }
 
-    public void saveCity(){
+    public void saveCountry(Country country){
+        //todo add savecountry method
+
+    }
+
+    public void saveCity(City city){
         //todo add save city method
     }
 
-    public void getCountry(){
+    public Country getCountry(){
         //todo add getcountry method
+        return null;
     }
 
-    public void getCity(){
+    public City getCity(){
         //todo add cetgity method
+
+        return null;
     }
 
-    
+    public Country[] getAllCountries(){
+        //todo add all countries method
+        return null;
+    }
+
+    public Country[] getFavouriteCountries(){
+        //todo add all fave countries method
+        return null;
+    }
+
+    public City[] getAllCities(){
+        //todo add all cities method
+        return null;
+    }
+
+    public City[] getFavouriteCities(){
+        //todo add all fave cities method
+        return null;
+    }
+
+    public void updateCountryNotes(Country country){
+        //todo update country notes
+    }
+
+    public void updateCityNotes(City city){
+        //todo update city notes
+    }
+
+    public void toggleCityFavourite(City city){
+        //todo toggle city fave
+    }
+
+    public void toggleCountryFavourite(Country country){
+        //todo toggle country fave
+    }
 
 }

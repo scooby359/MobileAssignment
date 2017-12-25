@@ -7,10 +7,10 @@ package net.cwalton.mobileassignment;
 public class City extends Location {
 
     private String mCountry;
-    private int mPopulation;
+    private String mPopulation;
     private String mAirport;
 
-    public City(String mName, locationType mType, String mWikiUrl, String country, int population, String airport) {
+    public City(String mName, String mType, String mWikiUrl, String country, String population, String airport) {
         super(mName, mType, mWikiUrl);
         this.mCountry = country;
         this.mPopulation = population;
@@ -25,11 +25,11 @@ public class City extends Location {
         this.mCountry = mCountry;
     }
 
-    public int getmPopulation() {
+    public String getmPopulation() {
         return mPopulation;
     }
 
-    public void setmPopulation(int mPopulation) {
+    public void setmPopulation(String mPopulation) {
         this.mPopulation = mPopulation;
     }
 

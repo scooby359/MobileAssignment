@@ -1,17 +1,21 @@
 package net.cwalton.mobileassignment;
 
+import android.util.Log;
+
 /**
  * Created by scoob on 24/12/2017.
  */
 
 public class Country extends Location {
 
+    private static final String LOG_TAG = "Country";
+
     private String mCurrency;
     private String mLanguage;
     private String mCapital;
     private String[] mCities;
 
-    public Country(String mName, locationType mType, String mWikiUrl, String mCurrency, String mLanguage, String mCapital) {
+    public Country(String mName, String mType, String mWikiUrl, String mCurrency, String mLanguage, String mCapital) {
         super(mName, mType, mWikiUrl);
         this.mCurrency = mCurrency;
         this.mLanguage = mLanguage;
@@ -49,4 +53,9 @@ public class Country extends Location {
     public void setmCities(String[] mCities) {
         this.mCities = mCities;
     }
+
+    public void printToLog(){
+        Log.d(LOG_TAG, "Name:" + getmName() + ", Capital: " + getmCapital() + ", Currency: " + getmCurrency());
+    }
 }
+
