@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 /**
  * Created by scoob on 15/12/2017.
+ * Fragment for home screen
  */
 
 public class FragmentHome extends Fragment {

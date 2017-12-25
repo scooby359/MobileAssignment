@@ -17,6 +17,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+/**
+ * Created by scoob on 24/12/2017.
+ * Main activity, loading navigation layout - nav drawer, toolbar and fragment holder
+ */
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 

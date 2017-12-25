@@ -2,6 +2,7 @@ package net.cwalton.mobileassignment;
 
 /**
  * Created by scoob on 24/12/2017.
+ * Contains initial data used to populate the Database on first run. No further use after that.
  */
 
 public class InitialData {

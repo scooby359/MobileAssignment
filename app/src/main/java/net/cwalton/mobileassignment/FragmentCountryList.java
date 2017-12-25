@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 /**
  * Created by scoob on 15/12/2017.
+ * Country list display - may merge with cities later on
  */
 
 public class FragmentCountryList extends Fragment {

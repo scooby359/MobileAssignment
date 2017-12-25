@@ -2,6 +2,7 @@ package net.cwalton.mobileassignment;
 
 /**
  * Created by scoob on 24/12/2017.
+ * Template for City Class, inheriting from Location super class
  */
 
 public class City extends Location {

@@ -4,6 +4,7 @@ import android.util.Log;
 
 /**
  * Created by scoob on 24/12/2017.
+ * Template for Country class, inheriting from Location super class
  */
 
 public class Country extends Location {
@@ -54,8 +55,5 @@ public class Country extends Location {
         this.mCities = mCities;
     }
 
-    public void printToLog(){
-        Log.d(LOG_TAG, "Name:" + getmName() + ", Capital: " + getmCapital() + ", Currency: " + getmCurrency());
-    }
 }
 

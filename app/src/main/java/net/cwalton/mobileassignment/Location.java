@@ -2,6 +2,8 @@ package net.cwalton.mobileassignment;
 
 /**
  * Created by scoob on 24/12/2017.
+ * Abstract super class used for City and Country classes.
+ * Intended so that homepage can display an array of favourite locations, inclusive of both cities and countries
  */
 
 public abstract class Location {
