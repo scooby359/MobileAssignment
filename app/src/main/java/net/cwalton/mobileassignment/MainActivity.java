@@ -115,6 +115,12 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_cities) {
 
+            FragmentCountry newFragment = new FragmentCountry();
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_holder, newFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+
         } else if (id == R.id.nav_settings) {
 
         }

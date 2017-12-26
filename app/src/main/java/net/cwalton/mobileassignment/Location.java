@@ -1,12 +1,14 @@
 package net.cwalton.mobileassignment;
 
+import android.util.Log;
+
 /**
  * Created by scoob on 24/12/2017.
  * Abstract super class used for City and Country classes.
  * Intended so that homepage can display an array of favourite locations, inclusive of both cities and countries
  */
 
-public abstract class Location {
+public class Location {
 
     public static final String LOC_TYPE_CITY = "city";
     public static final String LOC_TYPE_COUNTRY = "country";
@@ -66,5 +68,9 @@ public abstract class Location {
 
     public void setmNotes(String mNotes) {
         this.mNotes = mNotes;
+    }
+
+    public void debugLog(){
+        Log.d("Location", "" + mName + " " + mWikiUrl);
     }
 }

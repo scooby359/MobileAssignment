@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.List;
+import java.util.Vector;
+
 /**
  * Created by scoob on 24/12/2017.
  * Database class, holds all DB functions within it, returning city / country objects
@@ -168,43 +171,142 @@ public class TravelDB extends SQLiteOpenHelper {
 
     }
 
-    public void saveCountry(Country country){
-        //todo add savecountry method
+    private Country getCountryFromCursor(Cursor data){
+        int index = data.getColumnIndexOrThrow(COLUMN_COUNTY_NAME);
+        String name = data.getString(index);
 
+        index = data.getColumnIndexOrThrow(COLUMN_COUNTRY_TYPE);
+        String type = data.getString(index);
+
+        index = data.getColumnIndexOrThrow(COLUMN_COUNTRY_URL);
+        String url = data.getString(index);
+
+        index = data.getColumnIndexOrThrow(COLUMN_COUNTRY_CURRENCY);
+        String currency = data.getString(index);
+
+        index = data.getColumnIndexOrThrow(COLUMN_COUNTRY_LANGUAGE);
+        String language = data.getString(index);
+
+        index = data.getColumnIndexOrThrow(COLUMN_COUNTRY_CAPITAL);
+        String capital = data.getString(index);
+
+        Country country = new Country(name, type, url, currency, language, capital);
+
+        return country;
     }
 
-    public void saveCity(City city){
-        //todo add save city method
+    private City getCityFromCursor(Cursor data){
+        int index = data.getColumnIndexOrThrow(COLUMN_CITY_NAME);
+        String name = data.getString(index);
+
+        index = data.getColumnIndexOrThrow(COLUMN_CITY_TYPE);
+        String type = data.getString(index);
+
+        index = data.getColumnIndexOrThrow(COLUMN_CITY_URL);
+        String url = data.getString(index);
+
+        index = data.getColumnIndexOrThrow(COLUMN_CITY_COUNTRY);
+        String country = data.getString(index);
+
+        index = data.getColumnIndexOrThrow(COLUMN_CITY_POPULATION);
+        String population = data.getString(index);
+
+        index = data.getColumnIndexOrThrow(COLUMN_CITY_AIRPORT);
+        String airport = data.getString(index);
+
+        City city = new City(name, type, url, country, population, airport);
+        return city;
     }
 
-    public Country getCountry(){
-        //todo add getcountry method
-        return null;
+    //Query the DB with a country name String, returns a country object with all details
+    public Country getCountry(String name){
+
+        //get instance of db
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+
+        //create query
+        String query = "SELECT * FROM " + TABLE_COUNTRIES +
+                " WHERE " + COLUMN_COUNTY_NAME + " = " + "\"" + name + "\"" + ";";
+
+        Log.d(LOG_TAG, "DB country query = " + query);
+
+        //make query and store response
+        Cursor response =  sqLiteDatabase.rawQuery(query, null);
+        response.moveToFirst();
+
+        //Create a country instance from db response
+        Country country = getCountryFromCursor(response);
+
+        return country;
     }
 
-    public City getCity(){
-        //todo add cetgity method
+    public City getCity(String name){
 
-        return null;
+        //get instance of db
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+
+        //create query
+        String query = "SELECT * FROM " + TABLE_CITIES +
+                " WHERE " + COLUMN_CITY_NAME + " = " + "\"" + name + "\"" + ";";
+
+        Log.d(LOG_TAG, "DB city query = " + query);
+
+        //make query and store response
+        Cursor response =  sqLiteDatabase.rawQuery(query, null);
+        response.moveToFirst();
+
+        //Create a country instance from db response
+        City city = getCityFromCursor(response);
+
+        return city;
     }
 
-    public Country[] getAllCountries(){
+    public List<Country> getAllCountries(){
         //todo add all countries method
-        return null;
+
+        //get instance of db
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+
+        //create query
+        String query = "SELECT * FROM " + TABLE_COUNTRIES + ";";
+
+        Log.d(LOG_TAG, "DB country query = " + query);
+
+        //make query and store response
+        Cursor response =  sqLiteDatabase.rawQuery(query, null);
+        response.moveToFirst();
+
+        Vector<Country> countries = new Vector<Country>();
+
+        //For each row in cursor, create a country and add to vector
+        for (int i = 0; i < response.getCount(); i++) {
+            Country country = getCountryFromCursor(response);
+            countries.add(country);
+            if (!response.isLast()) {
+                response.moveToNext();
+            }
+        }
+
+        return countries;
     }
 
-    public Country[] getFavouriteCountries(){
+    public List<Country> getFavouriteCountries(){
         //todo add all fave countries method
         return null;
     }
 
-    public City[] getAllCities(){
+    public Vector<City> getAllCities(){
         //todo add all cities method
         return null;
     }
 
-    public City[] getFavouriteCities(){
+    public Vector<City> getFavouriteCities(){
         //todo add all fave cities method
+        return null;
+    }
+
+    public Vector<Location> getAllFavourites(){
+        //todo add all favourites method
         return null;
     }
 
