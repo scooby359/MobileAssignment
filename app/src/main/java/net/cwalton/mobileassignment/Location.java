@@ -19,7 +19,7 @@ public class Location {
     private String mName;
     private String mType;
     private String mWikiUrl;
-    private Boolean mFavourite;
+    private String mFavourite;
     private String mNotes;
 
     public Location(String mName, String mType, String mWikiUrl) {
@@ -54,11 +54,11 @@ public class Location {
         this.mWikiUrl = mWikiUrl;
     }
 
-    public Boolean getmFavourite() {
+    public String getmFavourite() {
         return mFavourite;
     }
 
-    public void setmFavourite(Boolean mFavourite) {
+    public void setmFavourite(String mFavourite) {
         this.mFavourite = mFavourite;
     }
 

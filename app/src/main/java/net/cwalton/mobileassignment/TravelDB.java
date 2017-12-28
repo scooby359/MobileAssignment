@@ -262,13 +262,11 @@ public class TravelDB extends SQLiteOpenHelper {
     }
 
     public List<Country> getAllCountries(){
-        //todo add all countries method
-
         //get instance of db
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
 
         //create query
-        String query = "SELECT * FROM " + TABLE_COUNTRIES + ";";
+        String query = "SELECT * FROM " + TABLE_COUNTRIES + " ORDER BY " + COLUMN_COUNTY_NAME + " ASC;";
 
         Log.d(LOG_TAG, "DB country query = " + query);
 
