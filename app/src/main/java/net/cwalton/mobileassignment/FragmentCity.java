@@ -13,6 +13,6 @@ public class FragmentCity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fragment_city);
+        setContentView(R.layout.fragment_city);
     }
 }

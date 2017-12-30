@@ -3,6 +3,7 @@ package net.cwalton.mobileassignment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -23,10 +24,12 @@ import android.view.MenuItem;
  */
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, ActivityComms {
 
     private static final String LOG_TAG = "MainActivity";
-    TravelDB database;
+    private TravelDB database;
+    public enum FRAGMENT_TYPE { HOME, COUNTRY_LIST, CITY_LIST, COUNTRY, CITY, SETTINGS};
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,13 +90,49 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onCountryListItemSelected(String location) {
+        Log.d(LOG_TAG, "Main called with ref: " + location);
+        ChangeFragment(FRAGMENT_TYPE.COUNTRY, location);
+    }
+
+    @Override
+    public void onCityListItemSelected(String location) {
+
+    }
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        //todo nav menu highlight not showing correctly - needs fixing
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
+            ChangeFragment(FRAGMENT_TYPE.HOME, null);
+        } else if (id == R.id.nav_countries) {
+            ChangeFragment(FRAGMENT_TYPE.COUNTRY_LIST, null);
+        } else if (id == R.id.nav_cities) {
+            ChangeFragment(FRAGMENT_TYPE.CITY_LIST, null);
+        } else if (id == R.id.nav_settings) {
+            ChangeFragment(FRAGMENT_TYPE.SETTINGS, null);
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+
+    public void ChangeFragment(FRAGMENT_TYPE type, String location){
+
+        /* Pass in data arguments
+        Bundle args = new Bundle();
+        args.putInt(ARG_COLUMN_COUNT, columnCount);
+        fragment.setArguments(args);
+         */
+
+
+        if (type == FRAGMENT_TYPE.HOME) {
             FragmentHome newFragment = new FragmentHome();
             FragmentManager fragmentManager = getFragmentManager();
 
@@ -106,34 +145,37 @@ public class MainActivity extends AppCompatActivity
             transaction.commit();
 
 
-        } else if (id == R.id.nav_countries) {
+        } else if (type == FRAGMENT_TYPE.COUNTRY_LIST) {
             FragmentCountryList newFragment = new FragmentCountryList();
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
             transaction.replace(R.id.fragment_holder, newFragment);
             transaction.addToBackStack(null);
             transaction.commit();
 
-        } else if (id == R.id.nav_cities) {
+        } else if (type == FRAGMENT_TYPE.CITY_LIST) {
+
+            //todo
+
+        }else if (type == FRAGMENT_TYPE.COUNTRY) {
 
             FragmentCountry newFragment = new FragmentCountry();
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            Bundle args = new Bundle();
+            args.putString(Location.FRAG_LOCATION_NAME, location);
+            newFragment.setArguments(args);
             transaction.replace(R.id.fragment_holder, newFragment);
             transaction.addToBackStack(null);
             transaction.commit();
 
-        } else if (id == R.id.nav_settings) {
+        }else if (type == FRAGMENT_TYPE.CITY) {
+
+            //todo
+
+        }else if (type == FRAGMENT_TYPE.SETTINGS) {
+
+            //todo
 
         }
-
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
-    public void ChangeFragment(int fragmentLayout){
-
-
 
     }
 

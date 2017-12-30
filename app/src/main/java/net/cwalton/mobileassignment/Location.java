@@ -14,6 +14,7 @@ public class Location {
     public static final String LOC_TYPE_COUNTRY = "country";
     public static final String LOC_FAV_TRUE = "true";
     public static final String LOC_FAV_FALSE = "false";
+    public static final String FRAG_LOCATION_NAME = "frag_location_name";
 
 
     private String mName;
