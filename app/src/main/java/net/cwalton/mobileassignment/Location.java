@@ -23,11 +23,13 @@ public class Location {
     private String mFavourite;
     private String mNotes;
 
-    public Location(String mName, String mType, String mWikiUrl) {
+    public Location(String mName, String mType, String mWikiUrl, String mFavourite, String mNotes) {
 
         this.mName = mName;
         this.mType = mType;
         this.mWikiUrl = mWikiUrl;
+        this.mFavourite = mFavourite;
+        this.mNotes = mNotes;
 
     }
 
@@ -72,6 +74,6 @@ public class Location {
     }
 
     public void debugLog(){
-        Log.d("Location", "" + mName + " " + mWikiUrl);
+        Log.d("Location", "" + mName + ". Fave = " + mFavourite);
     }
 }

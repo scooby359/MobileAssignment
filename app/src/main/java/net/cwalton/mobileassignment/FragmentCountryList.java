@@ -32,6 +32,7 @@ public class FragmentCountryList extends Fragment {
     private List<Country> mCountries;
     private ActivityComms mActivityComms;
 
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
@@ -66,7 +67,6 @@ public class FragmentCountryList extends Fragment {
         return view;
     }
 
-
     //http://www.vogella.com/tutorials/AndroidListView/article.html - for building custom list adapter
     public class customAdapter extends ArrayAdapter<Country>{
         private final Context mContext;
@@ -83,7 +83,6 @@ public class FragmentCountryList extends Fragment {
             View rowView = convertView;
             if (rowView == null) {
                 rowView = LayoutInflater.from(getContext()).inflate(R.layout.location_list_item, parent, false);
-                        //getLayoutInflater().inflate(R.layout.location_list_item, parent, false);
             }
 
             TextView name = (TextView) rowView.findViewById(R.id.tv_location_list_name);
@@ -98,7 +97,6 @@ public class FragmentCountryList extends Fragment {
 
             return rowView;
         }
-
 
     }
 

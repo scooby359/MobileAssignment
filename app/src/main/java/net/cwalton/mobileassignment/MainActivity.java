@@ -49,10 +49,8 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        Log.d(LOG_TAG, "Starting DB bit");
         database = new TravelDB(this);
         database.testDatabase();
-        Log.d(LOG_TAG, "DB bit done");
 
     }
 

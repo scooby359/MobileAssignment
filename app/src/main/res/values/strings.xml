@@ -15,4 +15,13 @@
 
     <string name="fav_location">Favourite Location</string>
 
+    <!-- Country page -->
+    <string name="button_fav_toggle">Toggle Favourite</string>
+    <string name="button_wiki_link">Go to Wikipedia Page</string>
+    <string name="button_notes">Show Notes</string>
+    <string name="country_details">Country Details</string>
+    <string name="country_capital">Capital City</string>
+    <string name="country_language">Language</string>
+    <string name="country_currency">Currency</string>
+    <string name="country_main_cities">Main Cities</string>
 </resources>

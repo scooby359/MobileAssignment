@@ -16,11 +16,13 @@ public class Country extends Location {
     private String mCapital;
     private String[] mCities;
 
-    public Country(String mName, String mType, String mWikiUrl, String mCurrency, String mLanguage, String mCapital) {
-        super(mName, mType, mWikiUrl);
+
+    public Country(String mName, String mType, String mWikiUrl, String mFavourite, String mNotes, String mCurrency, String mLanguage, String mCapital, String[] mCities) {
+        super(mName, mType, mWikiUrl, mFavourite, mNotes);
         this.mCurrency = mCurrency;
         this.mLanguage = mLanguage;
         this.mCapital = mCapital;
+        this.mCities = mCities;
     }
 
     public String getmCurrency() {

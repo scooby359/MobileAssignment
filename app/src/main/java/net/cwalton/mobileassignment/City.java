@@ -11,11 +11,11 @@ public class City extends Location {
     private String mPopulation;
     private String mAirport;
 
-    public City(String mName, String mType, String mWikiUrl, String country, String population, String airport) {
-        super(mName, mType, mWikiUrl);
-        this.mCountry = country;
-        this.mPopulation = population;
-        this.mAirport = airport;
+    public City(String mName, String mType, String mWikiUrl, String mFavourite, String mNotes, String mCountry, String mPopulation, String mAirport) {
+        super(mName, mType, mWikiUrl, mFavourite, mNotes);
+        this.mCountry = mCountry;
+        this.mPopulation = mPopulation;
+        this.mAirport = mAirport;
     }
 
     public String getmCountry() {
