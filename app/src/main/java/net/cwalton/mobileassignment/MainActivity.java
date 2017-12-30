@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -122,13 +121,6 @@ public class MainActivity extends AppCompatActivity
 
 
     public void ChangeFragment(FRAGMENT_TYPE type, String location){
-
-        /* Pass in data arguments
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-         */
-
 
         if (type == FRAGMENT_TYPE.HOME) {
             FragmentHome newFragment = new FragmentHome();

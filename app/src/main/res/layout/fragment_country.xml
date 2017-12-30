@@ -217,4 +217,47 @@
         </LinearLayout>
     </android.support.v7.widget.CardView>
 
+    <android.support.v7.widget.CardView
+
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cv_country_notes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        card_view:cardCornerRadius="2dp"
+        card_view:layout_constraintEnd_toEndOf="parent"
+        card_view:layout_constraintHorizontal_bias="0.0"
+        card_view:layout_constraintStart_toStartOf="parent"
+        card_view:layout_constraintTop_toBottomOf="@+id/cv_country_cities">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="@string/country_notes"
+                android:textColor="#000"
+                android:textSize="18sp"
+                tools:text="My Notes" />
+
+            <TextView
+                android:id="@+id/tv_country_notes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Notes" />
+
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+
+
 </android.support.constraint.ConstraintLayout>

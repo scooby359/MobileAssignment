@@ -303,8 +303,33 @@ public class TravelDB extends SQLiteOpenHelper {
     }
 
     public List<Country> getFavouriteCountries(){
-        //todo add all fave countries method
-        return null;
+
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+
+        //create query
+        String query = "SELECT * FROM " + TABLE_COUNTRIES +
+                " WHERE " + COLUMN_COUNTRY_FAVOURITE + " = \"" + Location.LOC_FAV_TRUE + "\"" +
+                " ORDER BY " + COLUMN_COUNTY_NAME + " ASC;";
+
+        Log.d(LOG_TAG, "DB country query = " + query);
+
+        //make query and store response
+        Cursor response =  sqLiteDatabase.rawQuery(query, null);
+        response.moveToFirst();
+
+        List<Country> countries = new ArrayList<>();
+
+        //For each row in cursor, create a country and add to vector
+        for (int i = 0; i < response.getCount(); i++) {
+            Country country = getCountryFromCursor(response);
+            countries.add(country);
+            if (!response.isLast()) {
+                response.moveToNext();
+            }
+        }
+
+        return countries;
+
     }
 
     public List<City> getAllCities(){
@@ -322,8 +347,18 @@ public class TravelDB extends SQLiteOpenHelper {
         return null;
     }
 
-    public void updateCountryNotes(Country country){
-        //todo update country notes
+    public void updateCountryNotes(String name, String notes){
+
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_COUNTRY_NOTES, notes);
+
+        String querytext = COLUMN_COUNTY_NAME + " = \"" + name + "\";";
+
+        int debugResponse = sqLiteDatabase.update(TABLE_COUNTRIES, values, querytext,null );
+
+
     }
 
     public void updateCityNotes(City city){
@@ -341,13 +376,11 @@ public class TravelDB extends SQLiteOpenHelper {
 
         String query = "SELECT * FROM " + TABLE_COUNTRIES +
                 " WHERE " + COLUMN_COUNTY_NAME + " = " + "\"" + countryname + "\";";
-        Log.d(LOG_TAG, "DB country query = " + query);
         Cursor response =  sqLiteDatabase.rawQuery(query, null);
         response.moveToFirst();
 
         Country country = getCountryFromCursor(response);
         String querytext = COLUMN_COUNTY_NAME + " = \"" + countryname + "\";";
-        Log.d(LOG_TAG, "Fave where query = " + querytext);
         ContentValues values = new ContentValues();
         String newValue;
 
@@ -359,15 +392,6 @@ public class TravelDB extends SQLiteOpenHelper {
             newValue = Location.LOC_FAV_FALSE;
         }
         int debugResponse = sqLiteDatabase.update(TABLE_COUNTRIES, values, querytext,null );
-        Log.d(LOG_TAG, "DB response = " + debugResponse);
-
-        //debug
-        query = "SELECT * FROM " + TABLE_COUNTRIES +
-                " WHERE " + COLUMN_COUNTY_NAME + " = " + "\"" + countryname + "\";";
-        response = sqLiteDatabase.rawQuery(query, null);
-        response.moveToFirst();
-        Country test = getCountryFromCursor(response);
-        test.debugLog();
 
         return newValue;
     }
@@ -401,6 +425,8 @@ public class TravelDB extends SQLiteOpenHelper {
         return cities;
     }
 
+    /*
+    //Didn't create database properly so had to retrospectively apply fields. Don't think needed again as constructor now changed
     public void initialiseFavourites(){
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
 
@@ -416,5 +442,5 @@ public class TravelDB extends SQLiteOpenHelper {
         Log.d(LOG_TAG,"City Rows set: " + cityResponse);
 
     }
-
+*/
 }
