@@ -22,23 +22,13 @@ public class City extends Location {
         return mCountry;
     }
 
-    public void setmCountry(String mCountry) {
-        this.mCountry = mCountry;
-    }
-
     public String getmPopulation() {
         return mPopulation;
-    }
-
-    public void setmPopulation(String mPopulation) {
-        this.mPopulation = mPopulation;
     }
 
     public String getmAirport() {
         return mAirport;
     }
-
-    public void setmAirport(String mAirport) {
-        this.mAirport = mAirport;
-    }
 }
+
+

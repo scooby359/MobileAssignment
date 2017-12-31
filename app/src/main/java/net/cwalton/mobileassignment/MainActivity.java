@@ -1,5 +1,6 @@
 package net.cwalton.mobileassignment;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 
 /**
  * Created by scoob on 24/12/2017.
@@ -95,7 +97,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onCityListItemSelected(String location) {
-
+        Log.d(LOG_TAG, "Main called with ref: " + location);
+        ChangeFragment(FRAGMENT_TYPE.CITY, location);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -143,8 +146,11 @@ public class MainActivity extends AppCompatActivity
             transaction.commit();
 
         } else if (type == FRAGMENT_TYPE.CITY_LIST) {
-
-            //todo
+            FragmentCityList newFragment = new FragmentCityList();
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_holder, newFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
 
         }else if (type == FRAGMENT_TYPE.COUNTRY) {
 
@@ -159,7 +165,14 @@ public class MainActivity extends AppCompatActivity
 
         }else if (type == FRAGMENT_TYPE.CITY) {
 
-            //todo
+            FragmentCity newFragment = new FragmentCity();
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            Bundle args = new Bundle();
+            args.putString(Location.FRAG_LOCATION_NAME, location);
+            newFragment.setArguments(args);
+            transaction.replace(R.id.fragment_holder, newFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
 
         }else if (type == FRAGMENT_TYPE.SETTINGS) {
 

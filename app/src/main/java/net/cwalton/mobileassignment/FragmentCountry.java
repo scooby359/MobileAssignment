@@ -125,7 +125,7 @@ public class FragmentCountry extends Fragment {
             Log.d(LOG_TAG,"remove fave");
         }
         updateFavIcon();
-        Toast.makeText(getActivity(), response, Toast.LENGTH_SHORT);
+        Toast.makeText(getActivity(), response, Toast.LENGTH_SHORT).show();
     }
 
     public void updateFavIcon(){

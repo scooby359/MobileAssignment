@@ -37,24 +37,12 @@ public class Location {
         return mName;
     }
 
-    public void setmName(String mName) {
-        this.mName = mName;
-    }
-
     public String getmType() {
         return mType;
     }
 
-    public void setmType(String mType) {
-        this.mType = mType;
-    }
-
     public String getmWikiUrl() {
         return mWikiUrl;
-    }
-
-    public void setmWikiUrl(String mWikiUrl) {
-        this.mWikiUrl = mWikiUrl;
     }
 
     public String getmFavourite() {

@@ -29,24 +29,12 @@ public class Country extends Location {
         return mCurrency;
     }
 
-    public void setmCurrency(String mCurrency) {
-        this.mCurrency = mCurrency;
-    }
-
     public String getmLanguage() {
         return mLanguage;
     }
 
-    public void setmLanguage(String mLanguage) {
-        this.mLanguage = mLanguage;
-    }
-
     public String getmCapital() {
         return mCapital;
-    }
-
-    public void setmCapital(String mCapital) {
-        this.mCapital = mCapital;
     }
 
     public String[] getmCities() {
