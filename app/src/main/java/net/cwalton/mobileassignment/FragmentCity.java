@@ -17,12 +17,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.net.URI;
-import java.net.URL;
-import java.util.List;
-
-import javax.xml.transform.URIResolver;
-
 /**
  * Created by scoob on 24/12/2017.
  * Template for City fragment activities
@@ -48,6 +42,7 @@ public class FragmentCity extends Fragment {
     private TextView tv_notes;
     private TextView tv_population;
     private TextView tv_airport;
+    private ImageButton ib_map;
 
     @Override
     public void onAttach(Context context) {
@@ -74,6 +69,7 @@ public class FragmentCity extends Fragment {
         tv_population = (TextView) view.findViewById(R.id.tv_city_population);
         tv_airport = (TextView) view.findViewById(R.id.tv_city_airport);
         ib_airport = (ImageButton) view.findViewById(R.id.ib_city_airport);
+        ib_map = (ImageButton) view.findViewById(R.id.ib_city_map);
 
         tv_name.setText(mCity.getmName());
         tv_population.setText(mCity.getmPopulation());
@@ -110,9 +106,18 @@ public class FragmentCity extends Fragment {
         ib_airport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                openMapsAirport();
+            }
+        });
+
+        ib_map.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 openMaps();
             }
         });
+
+
 
         return view;
     }
@@ -206,9 +211,15 @@ public class FragmentCity extends Fragment {
     //    private static final String MAPS_URL = "www.google.com/maps/search/";
     //https://www.google.com/maps/search/?api=1&query=centurylink+field
 
-    public void openMaps(){
+    public void openMapsAirport(){
 
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/maps/search/?api=1&query=" + mCity.getmAirport()));
+        Log.d(LOG_TAG, "Url = " + intent.getData());
+        startActivity(intent);
+    }
+
+    public void openMaps(){
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/maps/search/?api=1&query=" + mCity.getmName()));
         Log.d(LOG_TAG, "Url = " + intent.getData());
         startActivity(intent);
     }

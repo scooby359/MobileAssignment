@@ -42,4 +42,5 @@
     <string name="button_airport_map">Open Airport Location in Maps</string>
     <string name="city_notes">My Notes</string>
     <string name="city_details">City Details</string>
+    <string name="open_map">Open in Maps</string>
 </resources>

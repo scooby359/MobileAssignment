@@ -175,6 +175,8 @@ public class FragmentCityList extends Fragment {
 
             if (Location.LOC_FAV_FALSE.equals(fav)) {
                 favIcon.setVisibility(View.INVISIBLE);
+            }else{
+                favIcon.setVisibility(View.VISIBLE);
             }
 
             return rowView;

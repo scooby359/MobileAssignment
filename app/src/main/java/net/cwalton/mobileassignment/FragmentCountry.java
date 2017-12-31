@@ -45,6 +45,7 @@ public class FragmentCountry extends Fragment {
     private ImageButton ib_favourite;
     private ImageButton ib_wiki;
     private ImageButton ib_notes;
+    private ImageButton ib_map;
     private CardView cv_notes;
     private TextView tv_notes;
 
@@ -73,6 +74,7 @@ public class FragmentCountry extends Fragment {
         ib_notes = (ImageButton) view.findViewById(R.id.ib_country_notes);
         cv_notes = (CardView) view.findViewById(R.id.cv_country_notes);
         tv_notes = (TextView) view.findViewById(R.id.tv_country_notes);
+        ib_map = (ImageButton) view.findViewById(R.id.ib_country_map);
 
         tv_name.setText(country.getmName());
         tv_language.setText(country.getmLanguage());
@@ -111,6 +113,12 @@ public class FragmentCountry extends Fragment {
             }
         });
 
+        ib_map.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openMaps();
+            }
+        });
         return view;
     }
 
@@ -206,6 +214,12 @@ public class FragmentCountry extends Fragment {
         }else{
             cv_notes.setVisibility(View.VISIBLE);
         }
+    }
+
+    public void openMaps(){
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/maps/search/?api=1&query=" + country.getmName()));
+        Log.d(LOG_TAG, "Url = " + intent.getData());
+        startActivity(intent);
     }
 
 }
