@@ -15,14 +15,16 @@ public class Country extends Location {
     private String mLanguage;
     private String mCapital;
     private String[] mCities;
+    private String mCountryCode;
 
 
-    public Country(String mName, String mType, String mWikiUrl, String mFavourite, String mNotes, String mCurrency, String mLanguage, String mCapital, String[] mCities) {
+    public Country(String mName, String mType, String mWikiUrl, String mFavourite, String mNotes, String mCurrency, String mLanguage, String mCapital, String[] mCities, String mCountryCode) {
         super(mName, mType, mWikiUrl, mFavourite, mNotes);
         this.mCurrency = mCurrency;
         this.mLanguage = mLanguage;
         this.mCapital = mCapital;
         this.mCities = mCities;
+        this.mCountryCode = mCountryCode;
     }
 
     public String getmCurrency() {
@@ -35,6 +37,10 @@ public class Country extends Location {
 
     public String getmCapital() {
         return mCapital;
+    }
+
+    public String getmCountryCode() {
+        return mCountryCode;
     }
 
     public String[] getmCities() {

@@ -17,6 +17,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 /**
  * Created by scoob on 24/12/2017.
  * Template for City fragment activities
@@ -43,6 +45,7 @@ public class FragmentCity extends Fragment {
     private TextView tv_population;
     private TextView tv_airport;
     private ImageButton ib_map;
+    private TextView tv_country;
 
     @Override
     public void onAttach(Context context) {
@@ -70,10 +73,12 @@ public class FragmentCity extends Fragment {
         tv_airport = (TextView) view.findViewById(R.id.tv_city_airport);
         ib_airport = (ImageButton) view.findViewById(R.id.ib_city_airport);
         ib_map = (ImageButton) view.findViewById(R.id.ib_city_map);
+        tv_country = (TextView) view.findViewById(R.id.tv_city_ofcountry);
 
         tv_name.setText(mCity.getmName());
         tv_population.setText(mCity.getmPopulation());
         tv_airport.setText(mCity.getmAirport());
+        tv_country.setText(mCity.getmCountry());
 
         //todo - city details card breaking - need to make long text wrap
 

@@ -1,12 +1,17 @@
 package net.cwalton.mobileassignment;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.app.Fragment;
 import android.util.Log;
@@ -55,6 +60,7 @@ public class MainActivity extends AppCompatActivity
         database.testDatabase();
 
     }
+
 
     @Override
     public void onBackPressed() {
@@ -122,12 +128,13 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-
     public void ChangeFragment(FRAGMENT_TYPE type, String location){
 
         if (type == FRAGMENT_TYPE.HOME) {
             FragmentHome newFragment = new FragmentHome();
             FragmentManager fragmentManager = getFragmentManager();
+            Bundle args = new Bundle();
+            newFragment.setArguments(args);
 
             if (fragmentManager.getBackStackEntryCount() > 0) {
                 fragmentManager.getBackStackEntryAt(0);

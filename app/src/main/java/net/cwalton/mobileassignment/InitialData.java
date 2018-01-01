@@ -19,16 +19,16 @@ public class InitialData {
 
         Country[] Countries = new Country[NUM_COUNTRIES];
 
-        Countries[0] = new Country("United Kingdom", country, "https://en.wikipedia.org/wiki/United_kingdom", favFalse, notes, "Pound Sterling", "English", "London",null);
-        Countries[1] = new Country("United States",	 country, "https://en.wikipedia.org/wiki/United_States", favFalse, notes, "US Dollar", "English", "Washington, D.C.",null);
-        Countries[2] = new Country("Germany",country,"https://en.wikipedia.org/wiki/Germany",favFalse, notes, "Euro","German","Berlin",null);
-        Countries[3] = new Country("France",country,"https://en.wikipedia.org/wiki/France",favFalse, notes, "Euro","French","Paris",null);
-        Countries[4] = new Country("Spain",country,"https://en.wikipedia.org/wiki/Spain",favFalse, notes, "Euro","Spanish","Madrid",null);
-        Countries[5] = new Country("Australia",country,"https://en.wikipedia.org/wiki/Australia",favFalse, notes, "Australian Dollar","English","Canberra",null);
-        Countries[6] = new Country("Italy",country,"https://en.wikipedia.org/wiki/Italy",favFalse, notes, "Euro","Italian","Rome",null);
-        Countries[7] = new Country("Poland",country,"https://en.wikipedia.org/wiki/Poland",favFalse, notes, "Euro","Polish","Warsaw",null);
-        Countries[8] = new Country("Belgium",country,"https://en.wikipedia.org/wiki/Belgium",favFalse, notes, "Euro","Dutch","Brussels",null);
-        Countries[9] = new Country("India",country,"https://en.wikipedia.org/wiki/India",favFalse, notes, "Indian Rupee","Hindi","New Delhi",null);
+        Countries[0] = new Country("United Kingdom", country, "https://en.wikipedia.org/wiki/United_kingdom", favFalse, notes, "Pound Sterling", "English", "London",null,"gb");
+        Countries[1] = new Country("United States",	 country, "https://en.wikipedia.org/wiki/United_States", favFalse, notes, "US Dollar", "English", "Washington, D.C.",null,"us");
+        Countries[2] = new Country("Germany",country,"https://en.wikipedia.org/wiki/Germany",favFalse, notes, "Euro","German","Berlin",null,"de");
+        Countries[3] = new Country("France",country,"https://en.wikipedia.org/wiki/France",favFalse, notes, "Euro","French","Paris",null,"fr");
+        Countries[4] = new Country("Spain",country,"https://en.wikipedia.org/wiki/Spain",favFalse, notes, "Euro","Spanish","Madrid",null,"es");
+        Countries[5] = new Country("Australia",country,"https://en.wikipedia.org/wiki/Australia",favFalse, notes, "Australian Dollar","English","Canberra",null,"au");
+        Countries[6] = new Country("Italy",country,"https://en.wikipedia.org/wiki/Italy",favFalse, notes, "Euro","Italian","Rome",null,"it");
+        Countries[7] = new Country("Poland",country,"https://en.wikipedia.org/wiki/Poland",favFalse, notes, "Euro","Polish","Warsaw",null,"pl");
+        Countries[8] = new Country("Belgium",country,"https://en.wikipedia.org/wiki/Belgium",favFalse, notes, "Euro","Dutch","Brussels",null,"be");
+        Countries[9] = new Country("India",country,"https://en.wikipedia.org/wiki/India",favFalse, notes, "Indian Rupee","Hindi","New Delhi",null,"in");
 
         return Countries;
     }

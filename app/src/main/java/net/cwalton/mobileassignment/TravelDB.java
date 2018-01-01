@@ -37,6 +37,7 @@ public class TravelDB extends SQLiteOpenHelper {
     private static final String COLUMN_COUNTRY_CAPITAL = "country_capital";
     private static final String COLUMN_COUNTRY_FAVOURITE = "country_favourite";
     private static final String COLUMN_COUNTRY_NOTES = "country_notes";
+    private static final String COLUMN_COUNTRY_CODE = "country_code";
 
     private static final String TABLE_CITIES = "cities";
     private static final String COLUMN_CITY_NAME = "city_name";
@@ -67,7 +68,8 @@ public class TravelDB extends SQLiteOpenHelper {
                 COLUMN_COUNTRY_LANGUAGE + " TEXT," +
                 COLUMN_COUNTRY_CAPITAL + " TEXT," +
                 COLUMN_COUNTRY_FAVOURITE + " TEXT," +
-                COLUMN_COUNTRY_NOTES + " TEXT" +
+                COLUMN_COUNTRY_NOTES + " TEXT," +
+                COLUMN_COUNTRY_CODE + " TEXT" +
                 ");");
 
         //Create Cities table
@@ -101,6 +103,7 @@ public class TravelDB extends SQLiteOpenHelper {
             values.put(COLUMN_COUNTRY_LANGUAGE, countries[i].getmLanguage());
             values.put(COLUMN_COUNTRY_CAPITAL, countries[i].getmCapital());
             values.put(COLUMN_COUNTRY_FAVOURITE, Location.LOC_FAV_FALSE);
+            values.put(COLUMN_COUNTRY_CODE, countries[i].getmCountryCode());
             values.put(COLUMN_COUNTRY_NOTES, "");
             long id = sqLiteDatabase.insert(TABLE_COUNTRIES, null, values);
             if (id >= 0){
@@ -200,7 +203,7 @@ public class TravelDB extends SQLiteOpenHelper {
         index = data.getColumnIndexOrThrow(COLUMN_COUNTRY_CAPITAL);
         String capital = data.getString(index);
 
-        Country country = new Country(name, type, url, favourite, notes, currency, language, capital, null);
+        Country country = new Country(name, type, url, favourite, notes, currency, language, capital, null, null);
 
         return country;
     }
@@ -571,28 +574,29 @@ public class TravelDB extends SQLiteOpenHelper {
         return cities;
     }
 
+    public String getCountryCode(String countryname){
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+
+        String query = "SELECT " + COLUMN_COUNTRY_CODE + " FROM " + TABLE_COUNTRIES +
+                " WHERE " + COLUMN_COUNTY_NAME + " = " + "\"" + countryname + "\";";
+
+        Log.d(LOG_TAG, "DB country code query = " + query);
+        Cursor response =  sqLiteDatabase.rawQuery(query, null);
+        response.moveToFirst();
+
+        int index = response.getColumnIndexOrThrow(COLUMN_COUNTRY_CODE);
+        String code = response.getString(index);
+
+        Log.d(LOG_TAG, "Returned country code = " + code);
+
+        return code;
+
+    }
+
     //Return a list of all favourite locations - countries and cities
     public List<Location> getAllFavourites(){
         //todo add all favourites method
         return null;
     }
 
-    /*
-    //Didn't create database properly so had to retrospectively apply fields. Don't think needed again as constructor now changed
-    public void initialiseFavourites(){
-        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
-
-        ContentValues countryValues = new ContentValues();
-        countryValues.put(COLUMN_COUNTRY_FAVOURITE, Location.LOC_FAV_FALSE);
-        int cityResponse = sqLiteDatabase.update(TABLE_COUNTRIES, countryValues, null,null );
-
-        ContentValues cityValues = new ContentValues();
-        cityValues.put(COLUMN_CITY_FAVOURITE, Location.LOC_FAV_FALSE);
-        int countryResponse = sqLiteDatabase.update(TABLE_CITIES, cityValues, null,null );
-
-        Log.d(LOG_TAG,"Country Rows set: " + countryResponse);
-        Log.d(LOG_TAG,"City Rows set: " + cityResponse);
-
-    }
-*/
 }

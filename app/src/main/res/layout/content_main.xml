@@ -13,5 +13,5 @@
        android:id="@+id/fragment_holder"
        android:layout_width="match_parent"
        android:layout_height="match_parent"
-       />
+       tools:layout="@layout/fragment_home" />
 </android.support.constraint.ConstraintLayout>
