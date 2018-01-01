@@ -398,6 +398,7 @@ public class TravelDB extends SQLiteOpenHelper {
         return cities;
     }
 
+    //Todo - city and country filter && favourites to fix error in listview when searching while faourites on
 
     //Return a list of favourite countries
     public List<Country> getFavouriteCountries(){

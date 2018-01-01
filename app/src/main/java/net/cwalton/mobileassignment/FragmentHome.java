@@ -1,24 +1,19 @@
 package net.cwalton.mobileassignment;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
-import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -34,8 +29,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.json.JSONObject;
 
-import java.net.URL;
-
 /**
  * Created by scoob on 15/12/2017.
  * Fragment for home screen
@@ -45,6 +38,7 @@ public class FragmentHome extends Fragment {
 
     private static final String LOG_TAG = "FragmentHome";
     private Context mContext;
+    private ActivityComms mActivityComms;
     private ConstraintLayout ml_weather_loading;
     private ConstraintLayout ml_weather_loc_error;
     private ConstraintLayout ml_data_error;
@@ -54,11 +48,14 @@ public class FragmentHome extends Fragment {
     private TextView mtv_weather_location;
     private TextView mtv_weather_condition;
     private TextView mtv_weather_temp;
+    private Button b_cities;
+    private Button b_countries;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
+        mActivityComms = (ActivityComms)context;
     }
 
 
@@ -67,15 +64,17 @@ public class FragmentHome extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        cv_home_weather = (CardView) view.findViewById(R.id.cv_home_loc_weather);
-        ml_weather_loading = (ConstraintLayout) view.findViewById(R.id.lay_home_weather_loading);
-        ml_weather_loc_error = (ConstraintLayout) view.findViewById(R.id.lay_home_weather_loc_error);
-        ml_data_error = (ConstraintLayout) view.findViewById(R.id.lay_home_weather_data_error);
-        ml_weather_forecast = (ConstraintLayout) view.findViewById(R.id.lay_home_weather_forecast);
-        miv_weather_icon = (ImageView) view.findViewById(R.id.iv_home_weather_icon);
-        mtv_weather_location = (TextView) view.findViewById(R.id.tv_home_weather_loc);
-        mtv_weather_condition = (TextView) view.findViewById(R.id.tv_home_weather_type);
-        mtv_weather_temp = (TextView) view.findViewById(R.id.tv_home_weather_temp);
+        cv_home_weather = view.findViewById(R.id.cv_home_loc_weather);
+        ml_weather_loading = view.findViewById(R.id.lay_home_weather_loading);
+        ml_weather_loc_error = view.findViewById(R.id.lay_home_weather_loc_error);
+        ml_data_error = view.findViewById(R.id.lay_home_weather_data_error);
+        ml_weather_forecast = view.findViewById(R.id.lay_home_weather_forecast);
+        miv_weather_icon = view.findViewById(R.id.iv_home_weather_icon);
+        mtv_weather_location = view.findViewById(R.id.tv_home_weather_loc);
+        mtv_weather_condition = view.findViewById(R.id.tv_home_weather_type);
+        mtv_weather_temp = view.findViewById(R.id.tv_home_weather_temp);
+        b_cities = view.findViewById(R.id.b_home_cities);
+        b_countries = view.findViewById(R.id.b_home_countries);
 
         int haveLocPermission = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION);
         if (haveLocPermission == PackageManager.PERMISSION_GRANTED){
@@ -102,7 +101,6 @@ public class FragmentHome extends Fragment {
 
                                 String url = weatherHelper.buildCurrentWeatherUrl(location);
 
-                                //todo - sort this section out!
                                 RequestQueue queue = Volley.newRequestQueue(getActivity());
                                 JsonObjectRequest weatherRequest = new JsonObjectRequest
                                         (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -126,7 +124,6 @@ public class FragmentHome extends Fragment {
                                                 ml_data_error.setVisibility(View.VISIBLE);
                                             }
                                         });
-                                //Todo - blocked request while fixing layout
                                 queue.add(weatherRequest);
 
                             }
@@ -137,6 +134,21 @@ public class FragmentHome extends Fragment {
                     //handle no loc permission - eg change display
             cv_home_weather.setVisibility(View.GONE);
         }
+
+        b_cities.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mActivityComms.openCityList();
+            }
+        });
+
+        b_countries.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mActivityComms.openCountryList();
+            }
+        });
+
 
         return view;
     }

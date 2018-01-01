@@ -1,7 +1,5 @@
 package net.cwalton.mobileassignment;
 
-import android.util.Log;
-
 /**
  * Created by scoob on 24/12/2017.
  * Template for Country class, inheriting from Location super class

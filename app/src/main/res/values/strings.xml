@@ -53,5 +53,9 @@
     <string name="home_req_error">Error: Unable to get weather data</string>
     <string name="home_iv_weather_icon">Weather Icon</string>
     <string name="home_iv_req_error">Data Error</string>
+    <string name="location_icon">Location Icon</string>
+    <string name="therm_icon">Themometer Icon</string>
+    <string name="home_button_cities">Cities</string>
+    <string name="home_button_countries">Countries</string>
 
 </resources>

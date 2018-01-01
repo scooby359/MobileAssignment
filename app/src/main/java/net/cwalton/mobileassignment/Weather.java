@@ -1,23 +1,19 @@
 package net.cwalton.mobileassignment;
 
-import android.app.Activity;
-import android.content.Context;
-import android.location.*;
+import android.content.Intent;
 import android.location.Location;
+import android.net.Uri;
 import android.util.Log;
-import android.widget.Switch;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+import android.util.Xml;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import net.cwalton.mobileassignment.R;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
 
 /**
  * Created by scoob on 31/12/2017.
@@ -34,6 +30,7 @@ public class Weather {
     private static String mCityName;
     private static String mTemp;
     private static String mCondition;
+    private static int mConditionCode;
     private static int mIcon;
 
     private static final String API = "&APPID=";
@@ -54,7 +51,22 @@ public class Weather {
         String url = CURRENT_BASE_URL + LAT + location.getLatitude() + LON + location.getLongitude() + CENT + API + API_KEY;
         Log.d("Weather","Url = " + url);
         return url;
-    };
+    }
+
+    public String buildCityWeather(String city, String country){
+
+        try {
+            city = URLEncoder.encode(city, "UTF-8");
+            country = URLEncoder.encode(country, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        String url = CURRENT_BASE_URL + "q=" + city + "," + country + CENT + API + API_KEY;
+
+        Log.d("Weather","Url = " + url);
+        return url;
+    }
 
     public void getThreeDayWeather(){
         //todo - 3 day forecast for location
@@ -66,6 +78,7 @@ public class Weather {
         String name = null;
         String temp = null;
         String condition = null;
+        String code = null;
 
         String cod = jsonGetString(response, "cod");
         if (cod!=null){
@@ -91,16 +104,21 @@ public class Weather {
 
                     if (weatherObj!=null){
                         condition = jsonGetString(weatherObj, "main");
+                        code = jsonGetString(weatherObj, "id");
                     }
 
                 }
 
                 Log.d("Weather", "Name = " + name + ". Temp = " + temp + ". Condition = " + condition);
 
+                //Convert to int and back to string to lose decimal value easily
+                float tempFloat = Float.parseFloat(temp);
+                int tempInt = Math.round(tempFloat);
+                mTemp = Integer.toString(tempInt);
                 mCityName = name;
-                mTemp = temp;
                 mCondition = condition;
-                setIcon(condition);
+                mConditionCode = Integer.parseInt(code);
+                setIcon(mConditionCode);
             }
         }
     }
@@ -136,31 +154,29 @@ public class Weather {
 
     }
 
-    private void setIcon(String condition){
+    private void setIcon(int code){
 
-        if (condition.equals("Thunderstorm")){
+        if (code >= 200 && code <= 232){
             mIcon = R.drawable.ic_weather_lightning;
-        }else if (condition.equals("Drizzle")){
+        }else if (code >= 300 && code <= 321){
             mIcon = R.drawable.ic_weather_rainy;
-        }else if (condition.equals("Rain")){
+        }else if (code >= 500 && code <= 531){
             mIcon = R.drawable.ic_weather_pouring;
-        }else if (condition.equals("Snow")){
+        }else if (code >= 600 && code <= 622){
             mIcon = R.drawable.ic_weather_snowy;
-        }else if (condition.equals("Atmosphere")){
+        }else if (code >= 701 && code <= 781){
             mIcon = R.drawable.ic_weather_fog;
-        }else if (condition.equals("Clear")){
+        }else if (code == 800){
             mIcon = R.drawable.ic_weather_sunny;
-        }else if (condition.equals("Clouds")){
+        }else if (code >= 801 && code <= 804){
             mIcon = R.drawable.ic_weather_cloudy;
-        }else if (condition.equals("Extreme")){
+        }else if (code >= 900 && code <= 906){
             mIcon = R.drawable.ic_weather_lightning;
         }else{
             Log.d(LOG_TAG,"Condition unknown - defaulting icon");
             mIcon = R.drawable.ic_weather_lightning;
         }
     }
-
-
 
     public String getmCityName() {
         return mCityName;

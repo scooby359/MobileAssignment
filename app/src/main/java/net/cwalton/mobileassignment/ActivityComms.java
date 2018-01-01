@@ -10,4 +10,8 @@ public interface ActivityComms {
 
     void onCityListItemSelected(String location);
 
+    void openCityList();
+
+    void openCountryList();
+
 }

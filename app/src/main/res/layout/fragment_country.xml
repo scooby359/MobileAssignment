@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,269 +7,273 @@
     tools:context="net.cwalton.mobileassignment.FragmentCountry"
     android:background="@android:color/white">
 
-    <!--Header-->
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/Constraint_CountryHeader"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:minHeight="150dp">
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tv_country_name"
-            android:layout_width="wrap_content"
+        <!--Header-->
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/Constraint_CountryHeader"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:background="@color/colorPrimary"
+            android:minHeight="150dp">
+
+            <TextView
+                android:id="@+id/tv_country_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="32dp"
+                android:textColor="@color/secondaryColor"
+                android:textSize="36sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ib_country_notes"
+                tools:text="Country Name" />
+
+            <ImageButton
+                android:id="@+id/ib_country_favourite"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/button_fav_toggle"
+                android:src="@drawable/ic_star_border_white_24dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/ib_country_notes"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/button_notes"
+                android:src="@drawable/ic_edit_white_24dp"
+                app:layout_constraintEnd_toStartOf="@+id/ib_country_wiki"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/ib_country_wiki"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/button_wiki_link"
+                android:src="@drawable/ic_language_white_24dp"
+                app:layout_constraintEnd_toStartOf="@+id/ib_country_map"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/ib_country_map"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/open_map"
+                android:src="@drawable/ic_map_white_24dp"
+                app:layout_constraintEnd_toStartOf="@+id/ib_country_favourite"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </android.support.constraint.ConstraintLayout>
+
+        <!--Details Card-->
+        <android.support.v7.widget.CardView
+
+            android:id="@+id/cv_country_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="32dp"
-            android:textColor="@color/secondaryColor"
-            android:textSize="36sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ib_country_notes"
-            tools:text="Country Name" />
-
-        <ImageButton
-            android:id="@+id/ib_country_favourite"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginTop="8dp"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/button_fav_toggle"
-            android:src="@drawable/ic_star_border_white_24dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Constraint_CountryHeader">
 
-        <ImageButton
-            android:id="@+id/ib_country_notes"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/button_notes"
-            android:src="@drawable/ic_edit_white_24dp"
-            app:layout_constraintEnd_toStartOf="@+id/ib_country_wiki"
-            app:layout_constraintTop_toTopOf="parent" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
 
-        <ImageButton
-            android:id="@+id/ib_country_wiki"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/button_wiki_link"
-            android:src="@drawable/ic_language_white_24dp"
-            app:layout_constraintEnd_toStartOf="@+id/ib_country_map"
-            app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:id="@+id/tv_country_details_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/country_details"
+                    android:textColor="#000"
+                    android:textSize="18sp"
+                    tools:text="Details" />
 
-        <ImageButton
-            android:id="@+id/ib_country_map"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginEnd="8dp"
+                <android.support.v7.widget.GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:columnCount="2"
+                    >
+
+                    <!--Row 1-->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        app:layout_column="0"
+                        app:layout_row="0"
+                        android:text="@string/country_capital"
+                        app:layout_columnWeight="1"
+                        android:textStyle="bold"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_column="1"
+                        app:layout_row="0"
+                        android:id="@+id/tv_country_capital"
+                        tools:text="Capital"
+                        app:layout_columnWeight="1"
+                        />
+
+                    <!--Row 2-->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        app:layout_column="0"
+                        app:layout_row="1"
+                        android:text="@string/country_language"
+                        app:layout_columnWeight="1"
+                        android:textStyle="bold"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_country_language"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_column="1"
+                        app:layout_columnWeight="1"
+                        app:layout_row="1"
+                        tools:text="Language" />
+
+                    <!--Row 3-->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        app:layout_column="0"
+                        app:layout_row="2"
+                        android:text="@string/country_currency"
+                        app:layout_columnWeight="1"
+                        android:textStyle="bold"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_country_currency"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_column="1"
+                        app:layout_columnWeight="1"
+                        app:layout_row="2"
+                        tools:text="Currency" />
+
+                </android.support.v7.widget.GridLayout>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+
+        <android.support.v7.widget.CardView
+
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/cv_country_cities"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="16dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/open_map"
-            android:src="@drawable/ic_map_white_24dp"
-            app:layout_constraintEnd_toStartOf="@+id/ib_country_favourite"
-            app:layout_constraintTop_toTopOf="parent" />
+            card_view:cardCornerRadius="2dp"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintHorizontal_bias="0.0"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/cv_country_details">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/country_main_cities"
+                    android:textColor="#000"
+                    android:textSize="18sp"
+                    tools:text="Main Cities" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_country_maincities"
+                    tools:text="Main Cities"/>
+
+
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/cv_country_notes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            card_view:cardCornerRadius="2dp"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintHorizontal_bias="0.0"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/cv_country_cities">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/country_notes"
+                    android:textColor="#000"
+                    android:textSize="18sp"
+                    tools:text="My Notes" />
+
+                <TextView
+                    android:id="@+id/tv_country_notes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Notes" />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
 
     </android.support.constraint.ConstraintLayout>
 
-    <!--Details Card-->
-    <android.support.v7.widget.CardView
-
-        android:id="@+id/cv_country_details"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Constraint_CountryHeader">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <TextView
-                android:id="@+id/tv_country_details_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="@string/country_details"
-                android:textColor="#000"
-                android:textSize="18sp"
-                tools:text="Details" />
-
-            <android.support.v7.widget.GridLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:columnCount="2"
-                >
-
-                <!--Row 1-->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    app:layout_column="0"
-                    app:layout_row="0"
-                    android:text="@string/country_capital"
-                    app:layout_columnWeight="1"
-                    android:textStyle="bold"
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_column="1"
-                    app:layout_row="0"
-                    android:id="@+id/tv_country_capital"
-                    tools:text="Capital"
-                    app:layout_columnWeight="1"
-                    />
-
-                <!--Row 2-->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    app:layout_column="0"
-                    app:layout_row="1"
-                    android:text="@string/country_language"
-                    app:layout_columnWeight="1"
-                    android:textStyle="bold"
-                    />
-
-                <TextView
-                    android:id="@+id/tv_country_language"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_column="1"
-                    app:layout_columnWeight="1"
-                    app:layout_row="1"
-                    tools:text="Language" />
-
-                <!--Row 3-->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    app:layout_column="0"
-                    app:layout_row="2"
-                    android:text="@string/country_currency"
-                    app:layout_columnWeight="1"
-                    android:textStyle="bold"
-                    />
-
-                <TextView
-                    android:id="@+id/tv_country_currency"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_column="1"
-                    app:layout_columnWeight="1"
-                    app:layout_row="2"
-                    tools:text="Currency" />
-
-            </android.support.v7.widget.GridLayout>
-
-        </LinearLayout>
-
-    </android.support.v7.widget.CardView>
-
-
-    <android.support.v7.widget.CardView
-
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/cv_country_cities"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="16dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        card_view:cardCornerRadius="2dp"
-        card_view:layout_constraintEnd_toEndOf="parent"
-        card_view:layout_constraintHorizontal_bias="0.0"
-        card_view:layout_constraintStart_toStartOf="parent"
-        card_view:layout_constraintTop_toBottomOf="@+id/cv_country_details">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="@string/country_main_cities"
-                android:textColor="#000"
-                android:textSize="18sp"
-                tools:text="Main Cities" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tv_country_maincities"
-                tools:text="Main Cities"/>
-
-
-
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
-
-    <android.support.v7.widget.CardView
-
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/cv_country_notes"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="16dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        card_view:cardCornerRadius="2dp"
-        card_view:layout_constraintEnd_toEndOf="parent"
-        card_view:layout_constraintHorizontal_bias="0.0"
-        card_view:layout_constraintStart_toStartOf="parent"
-        card_view:layout_constraintTop_toBottomOf="@+id/cv_country_cities">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="@string/country_notes"
-                android:textColor="#000"
-                android:textSize="18sp"
-                tools:text="My Notes" />
-
-            <TextView
-                android:id="@+id/tv_country_notes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="Notes" />
-
-
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
-
-
-
-</android.support.constraint.ConstraintLayout>
+</ScrollView>

@@ -64,17 +64,17 @@ public class FragmentCountry extends Fragment {
         db = new TravelDB(mContext);
         country = db.getCountry(mLocationArg);
 
-        tv_name = (TextView) view.findViewById(R.id.tv_country_name);
-        tv_language = (TextView) view.findViewById(R.id.tv_country_language);
-        tv_currency = (TextView) view.findViewById(R.id.tv_country_currency);
-        tv_capital = (TextView) view.findViewById(R.id.tv_country_capital);
-        tv_maincities = (TextView) view.findViewById(R.id.tv_country_maincities);
-        ib_favourite = (ImageButton) view.findViewById(R.id.ib_country_favourite);
-        ib_wiki = (ImageButton) view.findViewById(R.id.ib_country_wiki);
-        ib_notes = (ImageButton) view.findViewById(R.id.ib_country_notes);
-        cv_notes = (CardView) view.findViewById(R.id.cv_country_notes);
-        tv_notes = (TextView) view.findViewById(R.id.tv_country_notes);
-        ib_map = (ImageButton) view.findViewById(R.id.ib_country_map);
+        tv_name = view.findViewById(R.id.tv_country_name);
+        tv_language = view.findViewById(R.id.tv_country_language);
+        tv_currency = view.findViewById(R.id.tv_country_currency);
+        tv_capital = view.findViewById(R.id.tv_country_capital);
+        tv_maincities = view.findViewById(R.id.tv_country_maincities);
+        ib_favourite = view.findViewById(R.id.ib_country_favourite);
+        ib_wiki = view.findViewById(R.id.ib_country_wiki);
+        ib_notes = view.findViewById(R.id.ib_country_notes);
+        cv_notes = view.findViewById(R.id.cv_country_notes);
+        tv_notes = view.findViewById(R.id.tv_country_notes);
+        ib_map = view.findViewById(R.id.ib_country_map);
 
         tv_name.setText(country.getmName());
         tv_language.setText(country.getmLanguage());

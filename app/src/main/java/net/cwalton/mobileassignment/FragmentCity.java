@@ -14,9 +14,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 /**
@@ -46,6 +55,9 @@ public class FragmentCity extends Fragment {
     private TextView tv_airport;
     private ImageButton ib_map;
     private TextView tv_country;
+    private TextView tv_weather_cond;
+    private TextView tv_weather_temp;
+    private ImageView iv_weather_icon;
 
     @Override
     public void onAttach(Context context) {
@@ -62,25 +74,29 @@ public class FragmentCity extends Fragment {
         db = new TravelDB(mContext);
         mCity = db.getCity(mLocationArg);
 
-        tv_name = (TextView) view.findViewById(R.id.tv_city_name);
-        ib_favourite = (ImageButton) view.findViewById(R.id.ib_city_favourite);
-        ib_wiki = (ImageButton) view.findViewById(R.id.ib_city_wiki);
-        ib_notes = (ImageButton) view.findViewById(R.id.ib_city_notes);
-        cv_notes = (CardView) view.findViewById(R.id.cv_city_notes);
-        tv_notes = (TextView) view.findViewById(R.id.tv_city_notes);
-        cv_weather = (CardView) view.findViewById(R.id.cv_city_weather);
-        tv_population = (TextView) view.findViewById(R.id.tv_city_population);
-        tv_airport = (TextView) view.findViewById(R.id.tv_city_airport);
-        ib_airport = (ImageButton) view.findViewById(R.id.ib_city_airport);
-        ib_map = (ImageButton) view.findViewById(R.id.ib_city_map);
-        tv_country = (TextView) view.findViewById(R.id.tv_city_ofcountry);
+        tv_name = view.findViewById(R.id.tv_city_name);
+        ib_favourite = view.findViewById(R.id.ib_city_favourite);
+        ib_wiki = view.findViewById(R.id.ib_city_wiki);
+        ib_notes = view.findViewById(R.id.ib_city_notes);
+        cv_notes = view.findViewById(R.id.cv_city_notes);
+        tv_notes = view.findViewById(R.id.tv_city_notes);
+        cv_weather = view.findViewById(R.id.cv_city_weather);
+        tv_population = view.findViewById(R.id.tv_city_population);
+        tv_airport = view.findViewById(R.id.tv_city_airport);
+        ib_airport = view.findViewById(R.id.ib_city_airport);
+        ib_map = view.findViewById(R.id.ib_city_map);
+        tv_country = view.findViewById(R.id.tv_city_ofcountry);
+        cv_weather = view.findViewById(R.id.cv_city_weather);
+        tv_weather_cond = view.findViewById(R.id.tv_city_weather_type);
+        tv_weather_temp = view.findViewById(R.id.tv_city_weather_temp);
+        iv_weather_icon = view.findViewById(R.id.iv_city_weather_icon);
 
         tv_name.setText(mCity.getmName());
         tv_population.setText(mCity.getmPopulation());
         tv_airport.setText(mCity.getmAirport());
         tv_country.setText(mCity.getmCountry());
 
-        //todo - city details card breaking - need to make long text wrap
+        cv_weather.setVisibility(View.GONE);
 
         updateNotesCard();
 
@@ -123,6 +139,30 @@ public class FragmentCity extends Fragment {
         });
 
 
+        //Weather bit
+        final Weather weatherHelper = new Weather();
+        String url = weatherHelper.buildCityWeather(mCity.getmName(), mCity.getmCountry());
+
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        JsonObjectRequest weatherRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(LOG_TAG, "JSON Response = " + response);
+                        cv_weather.setVisibility(View.VISIBLE);
+                        weatherHelper.parseCurrentWeatherResponse(response);
+                        tv_weather_cond.setText(weatherHelper.getmCondition());
+                        //todo - allow user to select farenheit
+                        tv_weather_temp.setText(weatherHelper.getmTemp()+"°c");
+                        iv_weather_icon.setImageDrawable(getResources().getDrawable(weatherHelper.getmIcon()));
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d(LOG_TAG, "JSON Response Error returned");
+                    }
+                });
+        queue.add(weatherRequest);
 
         return view;
     }

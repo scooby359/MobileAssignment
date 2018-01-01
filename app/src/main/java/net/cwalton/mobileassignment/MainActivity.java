@@ -1,42 +1,41 @@
 package net.cwalton.mobileassignment;
 
-import android.Manifest;
-import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.app.Fragment;
-import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.inputmethod.InputMethodManager;
 
 /**
  * Created by scoob on 24/12/2017.
  * Main activity, loading navigation layout - nav drawer, toolbar and fragment holder
  */
 
+//General todos:
+    //Todo - Back on homescreen should clear queue - instead, if on city / country, jumps back to list
+    //Todo - Put labels on country / city page buttons
+    //Todo - Fix toast on fave selection in city/country page
+    //Todo - Refactor city/country code to reduce repetition
+    //Todo - allow list view to set fave
+    //Todo - County pages - link cities to city pages
+    //Todo - Put Wiki pages into webview to retain in app
+    //Todo - settings for temp control
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, ActivityComms {
 
     private static final String LOG_TAG = "MainActivity";
     private TravelDB database;
-    public enum FRAGMENT_TYPE { HOME, COUNTRY_LIST, CITY_LIST, COUNTRY, CITY, SETTINGS};
-
+    public enum FRAGMENT_TYPE { HOME, COUNTRY_LIST, CITY_LIST, COUNTRY, CITY, SETTINGS}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,27 +43,37 @@ public class MainActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //If first launch and frag holder is null..
+        if (findViewById(R.id.fragment_holder) != null){
+            if (savedInstanceState != null){
+                return;
+            }
+
+            FragmentHome newFragment = new FragmentHome();
+            getFragmentManager().beginTransaction()
+                    .add(R.id.fragment_holder, newFragment)
+                    .commit();
+        }
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         database = new TravelDB(this);
         database.testDatabase();
-
     }
-
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -95,6 +104,7 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+
     @Override
     public void onCountryListItemSelected(String location) {
         Log.d(LOG_TAG, "Main called with ref: " + location);
@@ -105,6 +115,16 @@ public class MainActivity extends AppCompatActivity
     public void onCityListItemSelected(String location) {
         Log.d(LOG_TAG, "Main called with ref: " + location);
         ChangeFragment(FRAGMENT_TYPE.CITY, location);
+    }
+
+    @Override
+    public void openCityList() {
+        ChangeFragment(FRAGMENT_TYPE.CITY_LIST, null);
+    }
+
+    @Override
+    public void openCountryList() {
+        ChangeFragment(FRAGMENT_TYPE.COUNTRY_LIST, null);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -123,7 +143,7 @@ public class MainActivity extends AppCompatActivity
             ChangeFragment(FRAGMENT_TYPE.SETTINGS, null);
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -131,14 +151,16 @@ public class MainActivity extends AppCompatActivity
     public void ChangeFragment(FRAGMENT_TYPE type, String location){
 
         if (type == FRAGMENT_TYPE.HOME) {
+            //Todo - should call original fragment off stack instead of making new (stop multiple weather requests)
             FragmentHome newFragment = new FragmentHome();
             FragmentManager fragmentManager = getFragmentManager();
+
+            //Clear backstack queue
+            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
             Bundle args = new Bundle();
             newFragment.setArguments(args);
 
-            if (fragmentManager.getBackStackEntryCount() > 0) {
-                fragmentManager.getBackStackEntryAt(0);
-            }
 
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
             transaction.replace(R.id.fragment_holder, newFragment);
@@ -152,12 +174,15 @@ public class MainActivity extends AppCompatActivity
             transaction.addToBackStack(null);
             transaction.commit();
 
+
         } else if (type == FRAGMENT_TYPE.CITY_LIST) {
+
             FragmentCityList newFragment = new FragmentCityList();
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
             transaction.replace(R.id.fragment_holder, newFragment);
             transaction.addToBackStack(null);
             transaction.commit();
+
 
         }else if (type == FRAGMENT_TYPE.COUNTRY) {
 

@@ -78,7 +78,7 @@ public class FragmentCountryList extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_country_list, container, false);
 
         //Setup search box
-        etSearch = (EditText) view.findViewById(R.id.et_country_list_search);
+        etSearch = view.findViewById(R.id.et_country_list_search);
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -105,7 +105,7 @@ public class FragmentCountryList extends Fragment {
         });
 
         //Setup listview components and listener
-        mListview = (ListView) view.findViewById(R.id.lv_country_list);
+        mListview = view.findViewById(R.id.lv_country_list);
         mAdapter = new customAdapter(view.getContext());
         mListview.setAdapter(mAdapter);
         mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -117,7 +117,7 @@ public class FragmentCountryList extends Fragment {
         });
 
         //Setup listener for favourites switch
-        sFavToggle = (Switch) view.findViewById(R.id.s_fav_toggle);
+        sFavToggle = view.findViewById(R.id.s_fav_toggle);
         sFavToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
@@ -165,8 +165,8 @@ public class FragmentCountryList extends Fragment {
                 rowView = LayoutInflater.from(getContext()).inflate(R.layout.location_list_item, parent, false);
             }
 
-            TextView name = (TextView) rowView.findViewById(R.id.tv_location_list_name);
-            ImageView favIcon = (ImageView) rowView.findViewById(R.id.iv_location_list_favicon);
+            TextView name = rowView.findViewById(R.id.tv_location_list_name);
+            ImageView favIcon = rowView.findViewById(R.id.iv_location_list_favicon);
 
             name.setText(mCountries.get(position).getmName());
             String fav = mCountries.get(position).getmFavourite();
