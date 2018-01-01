@@ -21,14 +21,14 @@ import android.view.MenuItem;
  */
 
 //General todos:
-    //Todo - Back on homescreen should clear queue - instead, if on city / country, jumps back to list
     //Todo - Put labels on country / city page buttons
     //Todo - Fix toast on fave selection in city/country page
     //Todo - Refactor city/country code to reduce repetition
     //Todo - allow list view to set fave
     //Todo - County pages - link cities to city pages
-    //Todo - Put Wiki pages into webview to retain in app
     //Todo - settings for temp control
+    //Todo - make layouts consistent - colours / fonts
+    //Todo - sort app icon for launcher and splash screen
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, ActivityComms {
@@ -151,7 +151,6 @@ public class MainActivity extends AppCompatActivity
     public void ChangeFragment(FRAGMENT_TYPE type, String location){
 
         if (type == FRAGMENT_TYPE.HOME) {
-            //Todo - should call original fragment off stack instead of making new (stop multiple weather requests)
             FragmentHome newFragment = new FragmentHome();
             FragmentManager fragmentManager = getFragmentManager();
 
@@ -208,7 +207,7 @@ public class MainActivity extends AppCompatActivity
 
         }else if (type == FRAGMENT_TYPE.SETTINGS) {
 
-            //todo
+            //todo - settings frag?
 
         }
 

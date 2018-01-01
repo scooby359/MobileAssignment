@@ -9,6 +9,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.customtabs.CustomTabsIntent;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.text.InputType;
 import android.util.Log;
@@ -98,7 +100,6 @@ public class FragmentCountry extends Fragment {
             }
         });
 
-        //todo - better to have the inapp web view instead of opening externally
         ib_wiki.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -150,11 +151,10 @@ public class FragmentCountry extends Fragment {
     }
 
     public void openWebPage(){
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        intent.addCategory(Intent.CATEGORY_BROWSABLE);
-        intent.setData(Uri.parse(country.getmWikiUrl()));
-        startActivity(intent);
+        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        builder.setToolbarColor(ContextCompat.getColor(getActivity(), R.color.colorPrimary));
+        CustomTabsIntent customTabsIntent = builder.build();
+        customTabsIntent.launchUrl(getActivity(), Uri.parse(country.getmWikiUrl()));
     }
 
     public void openNotes(){
