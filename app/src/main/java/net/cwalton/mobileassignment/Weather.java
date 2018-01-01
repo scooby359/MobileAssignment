@@ -27,13 +27,7 @@ public class Weather {
     private static Context mContext;
     private Location mLocation;
 
-    public Weather(Context context) {
 
-        this.mContext = context;
-
-        //need to figure out how data is coming in to parse
-
-    }
 
     public static String getmCityName() {
         return mCityName;
@@ -56,46 +50,33 @@ public class Weather {
     }
 
 
-        private static final String API = "&APPID=";
-        private static final String API_KEY = "4e58a95dd52b09ca48d9e6f3d362bc8c";
+    private static final String API = "&APPID=";
+    private static final String API_KEY = "4e58a95dd52b09ca48d9e6f3d362bc8c";
 
-        private static final String DAILY_BASE_URL = "http://api.openweathermap.org/data/2.5/forecast/daily?q=";
-        private static final String THREE_DAYS = "&cnt=3";
-        private static final String ONE_DAY = "&cnt=1";
+    private static final String DAILY_BASE_URL = "http://api.openweathermap.org/data/2.5/forecast/daily?q=";
+    private static final String THREE_DAYS = "&cnt=3";
+    private static final String ONE_DAY = "&cnt=1";
 
-        private static final String CURRENT_BASE_URL = "http://api.openweathermap.org/data/2.5/weather?";
-        private static final String LAT = "lat=";
-        private static final String LON = "&lon=";
-
-
+    private static final String CURRENT_BASE_URL = "http://api.openweathermap.org/data/2.5/weather?";
+    private static final String LAT = "lat=";
+    private static final String LON = "&lon=";
 
 
 
-        public void getCurrentLocWeather(android.location.Location location){
-            //todo - current location weather
-            String url = CURRENT_BASE_URL + LAT + location.getLatitude() + LON + location.getLongitude() + API + API_KEY;
-            RequestQueue queue = Volley.newRequestQueue(mContext);
+    public String buildCurrentWeatherUrl(Location location){
+        String url = CURRENT_BASE_URL + LAT + location.getLatitude() + LON + location.getLongitude() + API + API_KEY;
+        return url;
+    };
 
-            StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    Log.d("Weather", "Response = " + response);
-                }
-            }, new Response.ErrorListener(){
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.d("Weather", "Error in response");
-                }
-            });
-            queue.add(stringRequest);
-        }
-
-        public void getThreeDayWeather(){
-            //todo - 3 day forecast for location
-        }
-
-
+    public void getThreeDayWeather(){
+        //todo - 3 day forecast for location
     }
+
+    public void parseJsonToWeather(){
+        //todo helper method to convert response to useable data
+    }
+
+}
 
 
 

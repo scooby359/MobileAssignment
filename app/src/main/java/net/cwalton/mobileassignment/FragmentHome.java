@@ -17,9 +17,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
+
+import org.json.JSONObject;
 
 import java.net.URL;
 
@@ -32,9 +40,6 @@ public class FragmentHome extends Fragment {
 
     private static final String LOG_TAG = "FragmentHome";
     private Context mContext;
-    private FusedLocationProviderClient mFusedLocationProviderClient;
-    private int mHaveLocPermission;
-    private Weather mWeather;
 
     @Override
     public void onAttach(Context context) {
@@ -47,25 +52,23 @@ public class FragmentHome extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        mHaveLocPermission = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION);
+        int haveLocPermission = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION);
 
-        mWeather = new Weather(mContext);
 
         TextView tv_status = (TextView) view.findViewById(R.id.tv_weather_status);
 
         //todo remove this
-        if (mHaveLocPermission == 0)
+        if (haveLocPermission == 0)
         {
             tv_status.setText("Permission OK");
         }else{
             tv_status.setText("Permission denied");
         }
 
-        getActivity();
+        if (haveLocPermission == PackageManager.PERMISSION_GRANTED){
 
-        if (mHaveLocPermission == PackageManager.PERMISSION_GRANTED){
-
-            mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(mContext);
+            final Weather weatherHelper = new Weather();
+            FusedLocationProviderClient mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(mContext);
             mFusedLocationProviderClient.getLastLocation() //get location
                     .addOnSuccessListener(getActivity(), new OnSuccessListener<android.location.Location>() {
                         @Override
@@ -79,8 +82,25 @@ public class FragmentHome extends Fragment {
                                 Log.d(LOG_TAG, "Lat = " + location.getLatitude() + " loc = " + location.getLongitude());
                                 //handle weather request then update screen on result
                                 //need to do async?
-                                RequestWeather requestWeather = new RequestWeather();
-                                requestWeather.doInBackground(location);
+
+                                String url = weatherHelper.buildCurrentWeatherUrl(location);
+
+                                RequestQueue queue = Volley.newRequestQueue(getActivity());
+                                JsonObjectRequest weatherRequest = new JsonObjectRequest
+                                        (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                                            @Override
+                                            public void onResponse(JSONObject response) {
+                                                Log.d(LOG_TAG, "JSON Response = " + response);
+                                            }
+                                        }, new Response.ErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                                Log.d(LOG_TAG, "JSON Response Error returned");
+                                            }
+                                        });
+                                queue.add(weatherRequest);
+
+
                             }
                         }
                     });
@@ -89,31 +109,8 @@ public class FragmentHome extends Fragment {
                     //handle no loc permission - eg change display
         }
 
-
-
         return view;
     }
 
-    private class RequestWeather extends AsyncTask<Location, Void, > {
-        @Override
-        protected Void doInBackground(Location... locations) {
-            mWeather.getCurrentLocWeather(locations[0]);
-            return null;
-        }
-
-        protected void onProgressUpdate(Integer... progress) {
-            //setProgressPercent(progress[0]);
-        }
-
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            Log.d(LOG_TAG, "PostExecute called");
-
-        }
-    }
-
-
-
 }
+
