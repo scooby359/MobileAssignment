@@ -46,5 +46,12 @@
     <string name="button_airport_map">Open Airport Location in Maps</string>
     <string name="city_notes">My Notes</string>
     <string name="city_details">City Details</string>
+    <string name="home_loading_weather">Loading Weather..</string>
+    <string name="home_weather_title">Current Weather</string>
+    <string name="home_loc_error">Error: Unable to find your location</string>
+    <string name="home_iv_loc_error_label">Location Error</string>
+    <string name="home_req_error">Error: Unable to get weather data</string>
+    <string name="home_iv_weather_icon">Weather Icon</string>
+    <string name="home_iv_req_error">Data Error</string>
 
 </resources>
