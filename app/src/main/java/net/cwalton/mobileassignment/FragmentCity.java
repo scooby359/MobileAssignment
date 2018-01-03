@@ -80,10 +80,10 @@ public class FragmentCity extends Fragment {
         final ImageView iv_weather_icon = view.findViewById(R.id.iv_city_weather_icon);
 
         //Populate layout objects
-        tvName.setText(city.getmName());
-        tvPopulation.setText(city.getmPopulation());
-        tvAirport.setText(city.getmAirport());
-        tvCountry.setText(city.getmCountry());
+        tvName.setText(city.getName());
+        tvPopulation.setText(city.getPopulation());
+        tvAirport.setText(city.getAirport());
+        tvCountry.setText(city.getCountry());
 
         cvWeather.setVisibility(View.GONE);
 
@@ -130,7 +130,7 @@ public class FragmentCity extends Fragment {
         //Request weather data and display to screen
         final Boolean useCelsius = sharedPref.getBoolean(getResources().getString(R.string.temp_key_celsius),true);
         final Weather weatherHelper = new Weather();
-        String url = weatherHelper.buildCityWeatherUrl(city.getmName(), city.getmCountry(), useCelsius);
+        String url = weatherHelper.buildCityWeatherUrl(city.getName(), city.getCountry(), useCelsius);
 
         RequestQueue queue = Volley.newRequestQueue(getActivity());
 
@@ -157,19 +157,19 @@ public class FragmentCity extends Fragment {
     }
 
     //Checks favourite status and updates database
-    public void toggleFavourite(ImageButton button){
+    private void toggleFavourite(ImageButton button){
         String response = db.toggleCityFavourite(locationArg);
         if (response.equals(Location.LOC_FAV_TRUE)){
-            city.setmFavourite(Location.LOC_FAV_TRUE);
+            city.setFavourite(Location.LOC_FAV_TRUE);
         }else {
-            city.setmFavourite(Location.LOC_FAV_FALSE);
+            city.setFavourite(Location.LOC_FAV_FALSE);
         }
         updateFavIcon(button);
     }
 
     //Updates favourite icon
-    public void updateFavIcon(ImageButton button){
-        if (city.getmFavourite().equals(Location.LOC_FAV_TRUE)){
+    private void updateFavIcon(ImageButton button){
+        if (city.getFavourite().equals(Location.LOC_FAV_TRUE)){
             //ib_favourite.setImageResource(R.drawable.ic_star_white_24dp);
             button.setImageResource(R.drawable.ic_star_white_24dp);
         }else{
@@ -179,30 +179,30 @@ public class FragmentCity extends Fragment {
     }
 
     //Open custom Chrome tab to location Wikipedia page
-    public void openWebPage(){
+    private void openWebPage(){
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
         builder.setToolbarColor(ContextCompat.getColor(getActivity(), R.color.colorPrimary));
         CustomTabsIntent customTabsIntent = builder.build();
-        customTabsIntent.launchUrl(getActivity(), Uri.parse(city.getmWikiUrl()));
+        customTabsIntent.launchUrl(getActivity(), Uri.parse(city.getWikiUrl()));
     }
 
     //Opens a dialog popup to view, edit and delete notes
-    public void openNotes(final CardView cardView, final TextView notes){
+    private void openNotes(final CardView cardView, final TextView notes){
         //todo - use custom layout so margins can be set
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         final EditText etNotes = new EditText(getActivity());
-        etNotes.setText(city.getmNotes());
+        etNotes.setText(city.getNotes());
 
         builder.setView(etNotes);
-        String title = getString(R.string.notes_title) + " " + city.getmName();
+        String title = getString(R.string.notes_title) + " " + city.getName();
         builder.setTitle(title);
         builder.setPositiveButton(R.string.notes_ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 String userInput = etNotes.getText().toString();
                 db.updateCityNotes(locationArg, userInput);
-                city.setmNotes(userInput);
+                city.setNotes(userInput);
                 updateNotesCard(cardView, notes);
             }})
                 .setNegativeButton(R.string.notes_delete, new DialogInterface.OnClickListener() {
@@ -216,14 +216,14 @@ public class FragmentCity extends Fragment {
     }
 
     //Opens a dialog to confirm user wants to delete notes then updates db
-    public void confirmDeleteNote(final CardView cardView, final TextView notes){
+    private void confirmDeleteNote(final CardView cardView, final TextView notes){
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(R.string.notes_delete_confirm)
                 .setPositiveButton(R.string.notes_delete, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         db.updateCityNotes(locationArg, "");
-                        city.setmNotes("");
+                        city.setNotes("");
                         updateNotesCard(cardView, notes);
                     }
                 })
@@ -238,9 +238,9 @@ public class FragmentCity extends Fragment {
     }
 
     //Updates notes card to display notes, or hide card if none saved
-    public void updateNotesCard(CardView cardView, TextView notes){
-        notes.setText(city.getmNotes());
-        if (city.getmNotes().equals("")){
+    private void updateNotesCard(CardView cardView, TextView notes){
+        notes.setText(city.getNotes());
+        if (city.getNotes().equals("")){
             cardView.setVisibility(View.INVISIBLE);
         }else{
             cardView.setVisibility(View.VISIBLE);
@@ -248,16 +248,16 @@ public class FragmentCity extends Fragment {
     }
 
     //Opens Airport in Google Maps
-    public void openMapsAirport(){
+    private void openMapsAirport(){
 
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/maps/search/?api=1&query=" + city.getmAirport()));
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/maps/search/?api=1&query=" + city.getAirport()));
         Log.d(LOG_TAG, "Url = " + intent.getData());
         startActivity(intent);
     }
 
     //Opens location in Google Maps
-    public void openMaps(){
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/maps/search/?api=1&query=" + city.getmName()));
+    private void openMaps(){
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/maps/search/?api=1&query=" + city.getName()));
         Log.d(LOG_TAG, "Url = " + intent.getData());
         startActivity(intent);
     }

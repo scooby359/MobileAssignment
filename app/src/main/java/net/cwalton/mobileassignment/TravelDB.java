@@ -6,11 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 /**
  * Created by scoob on 24/12/2017.
@@ -96,14 +94,14 @@ public class TravelDB extends SQLiteOpenHelper {
         for (int i = 0; i < data.getNUM_COUNTRIES(); i++){
 
             ContentValues values = new ContentValues();
-            values.put(COLUMN_COUNTY_NAME, countries[i].getmName());
-            values.put(COLUMN_COUNTRY_TYPE, countries[i].getmType());
-            values.put(COLUMN_COUNTRY_URL, countries[i].getmWikiUrl());
-            values.put(COLUMN_COUNTRY_CURRENCY, countries[i].getmCurrency());
-            values.put(COLUMN_COUNTRY_LANGUAGE, countries[i].getmLanguage());
-            values.put(COLUMN_COUNTRY_CAPITAL, countries[i].getmCapital());
+            values.put(COLUMN_COUNTY_NAME, countries[i].getName());
+            values.put(COLUMN_COUNTRY_TYPE, countries[i].getType());
+            values.put(COLUMN_COUNTRY_URL, countries[i].getWikiUrl());
+            values.put(COLUMN_COUNTRY_CURRENCY, countries[i].getCurrency());
+            values.put(COLUMN_COUNTRY_LANGUAGE, countries[i].getLanguage());
+            values.put(COLUMN_COUNTRY_CAPITAL, countries[i].getCapital());
             values.put(COLUMN_COUNTRY_FAVOURITE, Location.LOC_FAV_FALSE);
-            values.put(COLUMN_COUNTRY_CODE, countries[i].getmCountryCode());
+            values.put(COLUMN_COUNTRY_CODE, countries[i].getCountryCode());
             values.put(COLUMN_COUNTRY_NOTES, "");
             long id = sqLiteDatabase.insert(TABLE_COUNTRIES, null, values);
             if (id >= 0){
@@ -118,12 +116,12 @@ public class TravelDB extends SQLiteOpenHelper {
         //Populate city data
         for (int i = 0; i < data.getNUM_CITIES(); i++){
             ContentValues values = new ContentValues();
-            values.put(COLUMN_CITY_NAME, cities[i].getmName());
-            values.put(COLUMN_CITY_TYPE, cities[i].getmType());
-            values.put(COLUMN_CITY_URL, cities[i].getmWikiUrl());
-            values.put(COLUMN_CITY_COUNTRY, cities[i].getmCountry());
-            values.put(COLUMN_CITY_POPULATION, cities[i].getmPopulation());
-            values.put(COLUMN_CITY_AIRPORT, cities[i].getmAirport());
+            values.put(COLUMN_CITY_NAME, cities[i].getName());
+            values.put(COLUMN_CITY_TYPE, cities[i].getType());
+            values.put(COLUMN_CITY_URL, cities[i].getWikiUrl());
+            values.put(COLUMN_CITY_COUNTRY, cities[i].getCountry());
+            values.put(COLUMN_CITY_POPULATION, cities[i].getPopulation());
+            values.put(COLUMN_CITY_AIRPORT, cities[i].getAirport());
             values.put(COLUMN_CITY_FAVOURITE, Location.LOC_FAV_FALSE);
             values.put(COLUMN_CITY_NOTES, "");
             long id = sqLiteDatabase.insert(TABLE_CITIES, null, values);
@@ -203,9 +201,7 @@ public class TravelDB extends SQLiteOpenHelper {
         index = data.getColumnIndexOrThrow(COLUMN_COUNTRY_CAPITAL);
         String capital = data.getString(index);
 
-        Country country = new Country(name, type, url, favourite, notes, currency, language, capital, null, null);
-
-        return country;
+        return new Country(name, type, url, favourite, notes, currency, language, capital, null, null);
     }
 
     //Return a City object from a Cursor
@@ -234,8 +230,7 @@ public class TravelDB extends SQLiteOpenHelper {
         index = data.getColumnIndexOrThrow(COLUMN_CITY_AIRPORT);
         String airport = data.getString(index);
 
-        City city = new City(name, type, url, favourite, notes, country, population, airport);
-        return city;
+        return new City(name, type, url, favourite, notes, country, population, airport);
     }
 
     //Return a Country object for a given country name string
@@ -421,7 +416,7 @@ public class TravelDB extends SQLiteOpenHelper {
 
 
     //Return a list of favourite countries
-    public List<Country> getFavouriteCountries(){
+    private List<Country> getFavouriteCountries(){
 
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
 
@@ -452,7 +447,7 @@ public class TravelDB extends SQLiteOpenHelper {
     }
 
     //Return a list of all favourite cities
-    public List<City> getFavouriteCities(){
+    private List<City> getFavouriteCities(){
 
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
 
@@ -526,7 +521,7 @@ public class TravelDB extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         String newValue;
 
-        if (city.getmFavourite().equals(Location.LOC_FAV_FALSE)){
+        if (city.getFavourite().equals(Location.LOC_FAV_FALSE)){
             values.put(COLUMN_CITY_FAVOURITE, Location.LOC_FAV_TRUE);
             newValue = Location.LOC_FAV_TRUE;
         }else{
@@ -553,7 +548,7 @@ public class TravelDB extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         String newValue;
 
-        if (country.getmFavourite().equals(Location.LOC_FAV_FALSE)){
+        if (country.getFavourite().equals(Location.LOC_FAV_FALSE)){
             values.put(COLUMN_COUNTRY_FAVOURITE, Location.LOC_FAV_TRUE);
             newValue = Location.LOC_FAV_TRUE;
         }else{
@@ -609,6 +604,7 @@ public class TravelDB extends SQLiteOpenHelper {
         String code = response.getString(index);
 
         Log.d(LOG_TAG, "Returned country code = " + code);
+        sqLiteDatabase.close();
 
         return code;
 

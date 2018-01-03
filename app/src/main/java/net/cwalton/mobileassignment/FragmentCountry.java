@@ -71,51 +71,51 @@ public class FragmentCountry extends Fragment {
         final TextView tvCity5 = view.findViewById(R.id.tv_country_city5);
 
         //Set properties of layout objects
-        tvName.setText(country.getmName());
-        tvLanguage.setText(country.getmLanguage());
-        tvCurrency.setText(country.getmCurrency());
-        tvCapital.setText(country.getmCapital());
+        tvName.setText(country.getName());
+        tvLanguage.setText(country.getLanguage());
+        tvCurrency.setText(country.getCurrency());
+        tvCapital.setText(country.getCapital());
         updateNotesCard(cvNotes, tvNotes);
-        tvCity1.setText(cities.get(0).getmName());
-        tvCity2.setText(cities.get(1).getmName());
-        tvCity3.setText(cities.get(2).getmName());
-        tvCity4.setText(cities.get(3).getmName());
-        tvCity5.setText(cities.get(4).getmName());
+        tvCity1.setText(cities.get(0).getName());
+        tvCity2.setText(cities.get(1).getName());
+        tvCity3.setText(cities.get(2).getName());
+        tvCity4.setText(cities.get(3).getName());
+        tvCity5.setText(cities.get(4).getName());
         updateFavIcon(ibFavourite);
 
         //set onclick listeners for buttons
         tvCity1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activityComms.onCityListItemSelected(cities.get(0).getmName());
+                activityComms.onCityListItemSelected(cities.get(0).getName());
             }
         });
 
         tvCity2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activityComms.onCityListItemSelected(cities.get(1).getmName());
+                activityComms.onCityListItemSelected(cities.get(1).getName());
             }
         });
 
         tvCity3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activityComms.onCityListItemSelected(cities.get(2).getmName());
+                activityComms.onCityListItemSelected(cities.get(2).getName());
             }
         });
 
         tvCity4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activityComms.onCityListItemSelected(cities.get(3).getmName());
+                activityComms.onCityListItemSelected(cities.get(3).getName());
             }
         });
 
         tvCity5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activityComms.onCityListItemSelected(cities.get(4).getmName());
+                activityComms.onCityListItemSelected(cities.get(4).getName());
             }
         });
 
@@ -150,25 +150,25 @@ public class FragmentCountry extends Fragment {
     }
 
     //Checks favourite status and updates database
-    public void toggleFavourite(ImageButton button){
+    private void toggleFavourite(ImageButton button){
         Log.d(LOG_TAG, "Toggle Favourite called");
         String response = db.toggleCountryFavourite(locationArg);
         if (response.equals(Location.LOC_FAV_TRUE)){
-            country.setmFavourite(Location.LOC_FAV_TRUE);
+            country.setFavourite(Location.LOC_FAV_TRUE);
             Log.d(LOG_TAG,"set fave");
         }else {
-            country.setmFavourite(Location.LOC_FAV_FALSE);
+            country.setFavourite(Location.LOC_FAV_FALSE);
             Log.d(LOG_TAG,"remove fave");
         }
         updateFavIcon(button);
     }
 
     //Updates favourite icon
-    public void updateFavIcon(ImageButton button){
+    private void updateFavIcon(ImageButton button){
         Log.d(LOG_TAG,"update fave icon called");
-        Log.d(LOG_TAG, "Fav value is " + country.getmFavourite());
+        Log.d(LOG_TAG, "Fav value is " + country.getFavourite());
 
-        if (country.getmFavourite().equals(Location.LOC_FAV_TRUE)){
+        if (country.getFavourite().equals(Location.LOC_FAV_TRUE)){
             Log.d(LOG_TAG, "Fav = true");
             button.setImageResource(R.drawable.ic_star_white_24dp);
         }else{
@@ -178,31 +178,31 @@ public class FragmentCountry extends Fragment {
     }
 
     //Open custom Chrome tab to location Wikipedia page
-    public void openWebPage(){
+    private void openWebPage(){
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
         builder.setToolbarColor(ContextCompat.getColor(getActivity(), R.color.colorPrimary));
         CustomTabsIntent customTabsIntent = builder.build();
-        customTabsIntent.launchUrl(getActivity(), Uri.parse(country.getmWikiUrl()));
+        customTabsIntent.launchUrl(getActivity(), Uri.parse(country.getWikiUrl()));
     }
 
     //Opens a dialog popup to view, edit and delete notes
-    public void openNotes(final CardView card, final TextView notes){
+    private void openNotes(final CardView card, final TextView notes){
 
         //todo - use custom layout so margins can be set
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         final EditText etNotes = new EditText(getActivity());
-        etNotes.setText(country.getmNotes());
+        etNotes.setText(country.getNotes());
 
         builder.setView(etNotes);
-        String title = getString(R.string.notes_title) + " " + country.getmName();
+        String title = getString(R.string.notes_title) + " " + country.getName();
         builder.setTitle(title);
         builder.setPositiveButton(R.string.notes_ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 String userInput = etNotes.getText().toString();
                 db.updateCountryNotes(locationArg, userInput);
-                country.setmNotes(userInput);
+                country.setNotes(userInput);
                 updateNotesCard(card, notes);
             }})
             .setNegativeButton(R.string.notes_delete, new DialogInterface.OnClickListener() {
@@ -216,14 +216,14 @@ public class FragmentCountry extends Fragment {
     }
 
     //Opens a dialog to confirm user wants to delete notes then updates db
-    public void confirmDeleteNote(final CardView card, final TextView notes){
+    private void confirmDeleteNote(final CardView card, final TextView notes){
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(R.string.notes_delete_confirm)
                 .setPositiveButton(R.string.notes_delete, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         db.updateCountryNotes(locationArg, "");
-                        country.setmNotes("");
+                        country.setNotes("");
                         updateNotesCard(card, notes);
                     }
                 })
@@ -238,9 +238,9 @@ public class FragmentCountry extends Fragment {
     }
 
     //Updates notes card to display notes, or hide card if none saved
-    public void updateNotesCard(CardView card, TextView notes){
-        notes.setText(country.getmNotes());
-        if (country.getmNotes().equals("")){
+    private void updateNotesCard(CardView card, TextView notes){
+        notes.setText(country.getNotes());
+        if (country.getNotes().equals("")){
             card.setVisibility(View.INVISIBLE);
         }else{
             card.setVisibility(View.VISIBLE);
@@ -248,8 +248,8 @@ public class FragmentCountry extends Fragment {
     }
 
     //Opens location in Google Maps
-    public void openMaps(){
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/maps/search/?api=1&query=" + country.getmName()));
+    private void openMaps(){
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/maps/search/?api=1&query=" + country.getName()));
         Log.d(LOG_TAG, "Url = " + intent.getData());
         startActivity(intent);
     }

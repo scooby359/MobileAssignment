@@ -9,36 +9,36 @@ public class Country extends Location {
 
     private static final String LOG_TAG = "Country";
 
-    private String mCurrency;
-    private String mLanguage;
-    private String mCapital;
-    private String[] mCities;
-    private String mCountryCode;
+    private final String currency;
+    private final String language;
+    private final String capital;
+    private final String[] cities;
+    private final String countryCode;
 
 
-    public Country(String mName, String mType, String mWikiUrl, String mFavourite, String mNotes, String mCurrency, String mLanguage, String mCapital, String[] mCities, String mCountryCode) {
+    public Country(String mName, String mType, String mWikiUrl, String mFavourite, String mNotes, String currency, String language, String capital, String[] cities, String countryCode) {
         super(mName, mType, mWikiUrl, mFavourite, mNotes);
-        this.mCurrency = mCurrency;
-        this.mLanguage = mLanguage;
-        this.mCapital = mCapital;
-        this.mCities = mCities;
-        this.mCountryCode = mCountryCode;
+        this.currency = currency;
+        this.language = language;
+        this.capital = capital;
+        this.cities = cities;
+        this.countryCode = countryCode;
     }
 
-    public String getmCurrency() {
-        return mCurrency;
+    public String getCurrency() {
+        return currency;
     }
 
-    public String getmLanguage() {
-        return mLanguage;
+    public String getLanguage() {
+        return language;
     }
 
-    public String getmCapital() {
-        return mCapital;
+    public String getCapital() {
+        return capital;
     }
 
-    public String getmCountryCode() {
-        return mCountryCode;
+    public String getCountryCode() {
+        return countryCode;
     }
 
 }

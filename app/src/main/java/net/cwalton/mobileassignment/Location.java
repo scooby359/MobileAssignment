@@ -1,7 +1,5 @@
 package net.cwalton.mobileassignment;
 
-import android.util.Log;
-
 /**
  * Created by scoob on 24/12/2017.
  * Abstract super class used for City and Country classes.
@@ -17,48 +15,48 @@ public class Location {
     public static final String FRAG_LOCATION_NAME = "frag_location_name";
 
 
-    private String mName;
-    private String mType;
-    private String mWikiUrl;
-    private String mFavourite;
-    private String mNotes;
+    private final String name;
+    private final String type;
+    private final String wikiUrl;
+    private String favourite;
+    private String notes;
 
-    public Location(String mName, String mType, String mWikiUrl, String mFavourite, String mNotes) {
+    public Location(String name, String type, String wikiUrl, String favourite, String notes) {
 
-        this.mName = mName;
-        this.mType = mType;
-        this.mWikiUrl = mWikiUrl;
-        this.mFavourite = mFavourite;
-        this.mNotes = mNotes;
+        this.name = name;
+        this.type = type;
+        this.wikiUrl = wikiUrl;
+        this.favourite = favourite;
+        this.notes = notes;
 
     }
 
-    public String getmName() {
-        return mName;
+    public String getName() {
+        return name;
     }
 
-    public String getmType() {
-        return mType;
+    public String getType() {
+        return type;
     }
 
-    public String getmWikiUrl() {
-        return mWikiUrl;
+    public String getWikiUrl() {
+        return wikiUrl;
     }
 
-    public String getmFavourite() {
-        return mFavourite;
+    public String getFavourite() {
+        return favourite;
     }
 
-    public void setmFavourite(String mFavourite) {
-        this.mFavourite = mFavourite;
+    public void setFavourite(String favourite) {
+        this.favourite = favourite;
     }
 
-    public String getmNotes() {
-        return mNotes;
+    public String getNotes() {
+        return notes;
     }
 
-    public void setmNotes(String mNotes) {
-        this.mNotes = mNotes;
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 
 }

@@ -121,7 +121,7 @@ public class FragmentCountryList extends Fragment {
     }
 
     //Get filtered search results
-    public void filter(String input, View view, Boolean favouritesOnly){
+    private void filter(String input, View view, Boolean favouritesOnly){
         countries.clear();
         countries = db.filterCountries(input, favouritesOnly);
         listAdapter = new customAdapter(view.getContext());
@@ -148,8 +148,8 @@ public class FragmentCountryList extends Fragment {
             final TextView name = rowView.findViewById(R.id.tv_location_list_name);
             final ImageView favIcon = rowView.findViewById(R.id.iv_location_list_favicon);
 
-            name.setText(countries.get(position).getmName());
-            String fav = countries.get(position).getmFavourite();
+            name.setText(countries.get(position).getName());
+            String fav = countries.get(position).getFavourite();
 
             if (Location.LOC_FAV_FALSE.equals(fav)) {
                 favIcon.setColorFilter(getResources().getColor(R.color.fav_gray));
@@ -182,7 +182,7 @@ public class FragmentCountryList extends Fragment {
 
     //https://stackoverflow.com/questions/4165414/how-to-hide-soft-keyboard-on-android-after-clicking-outside-edittext
     //Keyboard was staying up if typing then clicked on screen - had to copy code from online as no clear 'official' way around this
-    public void hideKeyboard(View view) {
+    private void hideKeyboard(View view) {
         InputMethodManager inputMethodManager =(InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }

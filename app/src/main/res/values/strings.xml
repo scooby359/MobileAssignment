@@ -67,9 +67,11 @@
     <string name="settings_temp">Use Celsius</string>
     <string name="temp_key_celsius">temp_celsius</string>
     <string name="settings_c">Celsius</string>
-    <string name="settings_f">Farenheit</string>
+    <string name="settings_f">Fahrenheit</string>
 
-    <string name="settings_temp_celsius_off">Temperatures shown in farenheit</string>
+    <string name="settings_temp_celsius_off">Temperatures shown in fahrenheit</string>
     <string name="settings_temp_celsius_on">Temperatures shown in celsius</string>
+    <string name="splash_app_logo">App Logo</string>
+    <string name="home_fave_icon">Favourite Location Icon</string>
 
 </resources>

@@ -7,27 +7,27 @@ package net.cwalton.mobileassignment;
 
 public class City extends Location {
 
-    private String mCountry;
-    private String mPopulation;
-    private String mAirport;
+    private final String country;
+    private final String population;
+    private final String airport;
 
-    public City(String mName, String mType, String mWikiUrl, String mFavourite, String mNotes, String mCountry, String mPopulation, String mAirport) {
+    public City(String mName, String mType, String mWikiUrl, String mFavourite, String mNotes, String country, String population, String airport) {
         super(mName, mType, mWikiUrl, mFavourite, mNotes);
-        this.mCountry = mCountry;
-        this.mPopulation = mPopulation;
-        this.mAirport = mAirport;
+        this.country = country;
+        this.population = population;
+        this.airport = airport;
     }
 
-    public String getmCountry() {
-        return mCountry;
+    public String getCountry() {
+        return country;
     }
 
-    public String getmPopulation() {
-        return mPopulation;
+    public String getPopulation() {
+        return population;
     }
 
-    public String getmAirport() {
-        return mAirport;
+    public String getAirport() {
+        return airport;
     }
 }
 

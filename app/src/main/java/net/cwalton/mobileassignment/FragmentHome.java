@@ -105,8 +105,8 @@ public class FragmentHome extends Fragment {
             lvFavourites.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    String name = faveLocations.get(i).getmName();
-                    String type = faveLocations.get(i).getmType();
+                    String name = faveLocations.get(i).getName();
+                    String type = faveLocations.get(i).getType();
                     Log.d(LOG_TAG, "Clicked = " + name + " + " + type);
                     if (type.equals(net.cwalton.mobileassignment.Location.LOC_TYPE_CITY)){
                         activityComms.onCityListItemSelected(name);
@@ -220,8 +220,8 @@ public class FragmentHome extends Fragment {
                 final TextView name = rowView.findViewById(R.id.tv_fave_name);
                 final ImageView favIcon = rowView.findViewById(R.id.iv_fave_icon);
 
-                name.setText(faveLocations.get(position).getmName());
-                if (faveLocations.get(position).getmType().equals(net.cwalton.mobileassignment.Location.LOC_TYPE_CITY)){
+                name.setText(faveLocations.get(position).getName());
+                if (faveLocations.get(position).getType().equals(net.cwalton.mobileassignment.Location.LOC_TYPE_CITY)){
                     favIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_location_city_black_24dp));
                 }else{
                     favIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_earth));
@@ -235,7 +235,7 @@ public class FragmentHome extends Fragment {
     //Sorts favourite locations by name
     static class SortFavourites implements Comparator<net.cwalton.mobileassignment.Location>{
         public int compare(net.cwalton.mobileassignment.Location one, net.cwalton.mobileassignment.Location two){
-            return one.getmName().compareTo(two.getmName());
+            return one.getName().compareTo(two.getName());
         }
     }
 }

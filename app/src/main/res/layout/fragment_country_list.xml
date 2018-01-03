@@ -7,7 +7,7 @@
     android:background="#ffffff"
     android:clickable="true"
     android:focusableInTouchMode="true"
-    >
+    android:focusable="true">
 
     <Switch
         android:id="@+id/s_fav_toggle"
