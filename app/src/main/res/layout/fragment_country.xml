@@ -209,7 +209,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="16dp">
 
@@ -223,11 +223,39 @@
                     tools:text="Main Cities" />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tv_country_city1"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/tv_country_maincities"
-                    tools:text="Main Cities"/>
+                    android:padding="8dp"
+                    tools:text="city 1" />
 
+                <TextView
+                    android:id="@+id/tv_country_city2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    tools:text="city 2" />
+
+                <TextView
+                    android:id="@+id/tv_country_city3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    tools:text="city 3" />
+
+                <TextView
+                    android:id="@+id/tv_country_city4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    tools:text="city 4" />
+
+                <TextView
+                    android:id="@+id/tv_country_city5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    tools:text="city 5" />
 
 
             </LinearLayout>
@@ -241,9 +269,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="16dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             card_view:cardCornerRadius="2dp"
+            card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintHorizontal_bias="0.0"
             card_view:layout_constraintStart_toStartOf="parent"

@@ -5,9 +5,10 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
@@ -19,7 +20,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -29,7 +29,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 /**
  * Created by scoob on 24/12/2017.
@@ -40,100 +39,87 @@ public class FragmentCity extends Fragment {
 
     private static final String LOG_TAG = "FragmentCity";
 
-    private Context mContext;
-
+    private Context context;
     private TravelDB db;
-    private City mCity;
-    private String mLocationArg;
+    private City city;
+    private String locationArg;
+    private SharedPreferences sharedPref;
 
-    private TextView tv_name;
-    private ImageButton ib_favourite;
-    private ImageButton ib_wiki;
-    private ImageButton ib_notes;
-    private ImageButton ib_airport;
-    private CardView cv_notes;
-    private CardView cv_weather;
-    private TextView tv_notes;
-    private TextView tv_population;
-    private TextView tv_airport;
-    private ImageButton ib_map;
-    private TextView tv_country;
-    private TextView tv_weather_cond;
-    private TextView tv_weather_temp;
-    private ImageView iv_weather_icon;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mContext = context;
+        this.context = context;
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        //Setup view and get location information
         View view = inflater.inflate(R.layout.fragment_city, container, false);
-        mLocationArg = getArguments().getString(Location.FRAG_LOCATION_NAME);
+        locationArg = getArguments().getString(Location.FRAG_LOCATION_NAME);
+        db = new TravelDB(context);
+        city = db.getCity(locationArg);
 
-        db = new TravelDB(mContext);
-        mCity = db.getCity(mLocationArg);
+        //Get refs to all layout objects
+        final TextView tvName = view.findViewById(R.id.tv_city_name);
+        final ImageButton ibFavourite = view.findViewById(R.id.ib_city_favourite);
+        final ImageButton ibWiki = view.findViewById(R.id.ib_city_wiki);
+        final ImageButton ibNotes = view.findViewById(R.id.ib_city_notes);
+        final CardView cvNotes = view.findViewById(R.id.cv_city_notes);
+        final TextView tvNotes = view.findViewById(R.id.tv_city_notes);
+        final CardView cvWeather = view.findViewById(R.id.cv_city_weather);
+        final TextView tvPopulation = view.findViewById(R.id.tv_city_population);
+        final TextView tvAirport = view.findViewById(R.id.tv_city_airport);
+        final ImageButton ibAirport = view.findViewById(R.id.ib_city_airport);
+        final ImageButton ibMap = view.findViewById(R.id.ib_city_map);
+        final TextView tvCountry = view.findViewById(R.id.tv_city_ofcountry);
+        final TextView tvWeatherCond = view.findViewById(R.id.tv_city_weather_type);
+        final TextView tvWeatherTemp = view.findViewById(R.id.tv_city_weather_temp);
+        final ImageView iv_weather_icon = view.findViewById(R.id.iv_city_weather_icon);
 
-        tv_name = view.findViewById(R.id.tv_city_name);
-        ib_favourite = view.findViewById(R.id.ib_city_favourite);
-        ib_wiki = view.findViewById(R.id.ib_city_wiki);
-        ib_notes = view.findViewById(R.id.ib_city_notes);
-        cv_notes = view.findViewById(R.id.cv_city_notes);
-        tv_notes = view.findViewById(R.id.tv_city_notes);
-        cv_weather = view.findViewById(R.id.cv_city_weather);
-        tv_population = view.findViewById(R.id.tv_city_population);
-        tv_airport = view.findViewById(R.id.tv_city_airport);
-        ib_airport = view.findViewById(R.id.ib_city_airport);
-        ib_map = view.findViewById(R.id.ib_city_map);
-        tv_country = view.findViewById(R.id.tv_city_ofcountry);
-        cv_weather = view.findViewById(R.id.cv_city_weather);
-        tv_weather_cond = view.findViewById(R.id.tv_city_weather_type);
-        tv_weather_temp = view.findViewById(R.id.tv_city_weather_temp);
-        iv_weather_icon = view.findViewById(R.id.iv_city_weather_icon);
+        //Populate layout objects
+        tvName.setText(city.getmName());
+        tvPopulation.setText(city.getmPopulation());
+        tvAirport.setText(city.getmAirport());
+        tvCountry.setText(city.getmCountry());
 
-        tv_name.setText(mCity.getmName());
-        tv_population.setText(mCity.getmPopulation());
-        tv_airport.setText(mCity.getmAirport());
-        tv_country.setText(mCity.getmCountry());
+        cvWeather.setVisibility(View.GONE);
 
-        cv_weather.setVisibility(View.GONE);
+        updateNotesCard(cvNotes, tvNotes);
+        updateFavIcon(ibFavourite);
 
-        updateNotesCard();
-
-        updateFavIcon();
-
-        ib_favourite.setOnClickListener(new View.OnClickListener() {
+        //Set onclick listeners
+        ibFavourite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toggleFavourite();
+                toggleFavourite(ibFavourite);
             }
         });
 
-        ib_wiki.setOnClickListener(new View.OnClickListener() {
+        ibWiki.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openWebPage();
             }
         });
 
-        ib_notes.setOnClickListener(new View.OnClickListener() {
+        ibNotes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openNotes();
+                openNotes(cvNotes, tvNotes);
             }
         });
 
-        ib_airport.setOnClickListener(new View.OnClickListener() {
+        ibAirport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openMapsAirport();
             }
         });
 
-        ib_map.setOnClickListener(new View.OnClickListener() {
+        ibMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openMaps();
@@ -141,21 +127,22 @@ public class FragmentCity extends Fragment {
         });
 
 
-        //Weather bit
+        //Request weather data and display to screen
+        final Boolean useCelsius = sharedPref.getBoolean(getResources().getString(R.string.temp_key_celsius),true);
         final Weather weatherHelper = new Weather();
-        String url = weatherHelper.buildCityWeather(mCity.getmName(), mCity.getmCountry());
+        String url = weatherHelper.buildCityWeatherUrl(city.getmName(), city.getmCountry(), useCelsius);
 
         RequestQueue queue = Volley.newRequestQueue(getActivity());
+
         JsonObjectRequest weatherRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(LOG_TAG, "JSON Response = " + response);
-                        cv_weather.setVisibility(View.VISIBLE);
-                        weatherHelper.parseCurrentWeatherResponse(response);
-                        tv_weather_cond.setText(weatherHelper.getmCondition());
-                        //todo - allow user to select farenheit
-                        tv_weather_temp.setText(weatherHelper.getmTemp()+"°c");
+                        cvWeather.setVisibility(View.VISIBLE);
+                        weatherHelper.parseCurrentWeatherResponse(response, useCelsius);
+                        tvWeatherCond.setText(weatherHelper.getmCondition());
+                        tvWeatherTemp.setText(weatherHelper.getmTemp());
                         iv_weather_icon.setImageDrawable(getResources().getDrawable(weatherHelper.getmIcon()));
                     }
                 }, new Response.ErrorListener() {
@@ -169,104 +156,108 @@ public class FragmentCity extends Fragment {
         return view;
     }
 
-    public void toggleFavourite(){
-        String response = db.toggleCityFavourite(mLocationArg);
+    //Checks favourite status and updates database
+    public void toggleFavourite(ImageButton button){
+        String response = db.toggleCityFavourite(locationArg);
         if (response.equals(Location.LOC_FAV_TRUE)){
-            mCity.setmFavourite(Location.LOC_FAV_TRUE);
+            city.setmFavourite(Location.LOC_FAV_TRUE);
         }else {
-            mCity.setmFavourite(Location.LOC_FAV_FALSE);
+            city.setmFavourite(Location.LOC_FAV_FALSE);
         }
-        updateFavIcon();
-        Toast.makeText(getActivity(), response, Toast.LENGTH_SHORT).show();
+        updateFavIcon(button);
     }
 
-    public void updateFavIcon(){
-        if (mCity.getmFavourite().equals(Location.LOC_FAV_TRUE)){
-            ib_favourite.setImageResource(R.drawable.ic_star_white_24dp);
+    //Updates favourite icon
+    public void updateFavIcon(ImageButton button){
+        if (city.getmFavourite().equals(Location.LOC_FAV_TRUE)){
+            //ib_favourite.setImageResource(R.drawable.ic_star_white_24dp);
+            button.setImageResource(R.drawable.ic_star_white_24dp);
         }else{
-            ib_favourite.setImageResource(R.drawable.ic_star_border_white_24dp);
+            //ib_favourite.setImageResource(R.drawable.ic_star_border_white_24dp);
+            button.setImageResource(R.drawable.ic_star_border_white_24dp);
         }
     }
 
+    //Open custom Chrome tab to location Wikipedia page
     public void openWebPage(){
-
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
         builder.setToolbarColor(ContextCompat.getColor(getActivity(), R.color.colorPrimary));
         CustomTabsIntent customTabsIntent = builder.build();
-        customTabsIntent.launchUrl(getActivity(), Uri.parse(mCity.getmWikiUrl()));
+        customTabsIntent.launchUrl(getActivity(), Uri.parse(city.getmWikiUrl()));
     }
 
-    public void openNotes(){
-
+    //Opens a dialog popup to view, edit and delete notes
+    public void openNotes(final CardView cardView, final TextView notes){
         //todo - use custom layout so margins can be set
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        final EditText et_notes = new EditText(getActivity());
-        et_notes.setText(mCity.getmNotes());
+        final EditText etNotes = new EditText(getActivity());
+        etNotes.setText(city.getmNotes());
 
-        builder.setView(et_notes);
-        String title = getString(R.string.notes_title) + " " + mCity.getmName();
+        builder.setView(etNotes);
+        String title = getString(R.string.notes_title) + " " + city.getmName();
         builder.setTitle(title);
         builder.setPositiveButton(R.string.notes_ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                String userInput = et_notes.getText().toString();
-                db.updateCityNotes(mLocationArg, userInput);
-                mCity.setmNotes(userInput);
-                updateNotesCard();
+                String userInput = etNotes.getText().toString();
+                db.updateCityNotes(locationArg, userInput);
+                city.setmNotes(userInput);
+                updateNotesCard(cardView, notes);
             }})
                 .setNegativeButton(R.string.notes_delete, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        confirmDeleteNote();
+                        confirmDeleteNote(cardView, notes);
                     }
                 });
         AlertDialog dialog = builder.create();
         dialog.show();
     }
 
-    public void confirmDeleteNote(){
+    //Opens a dialog to confirm user wants to delete notes then updates db
+    public void confirmDeleteNote(final CardView cardView, final TextView notes){
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(R.string.notes_delete_confirm)
                 .setPositiveButton(R.string.notes_delete, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        db.updateCityNotes(mLocationArg, "");
-                        mCity.setmNotes("");
-                        updateNotesCard();
+                        db.updateCityNotes(locationArg, "");
+                        city.setmNotes("");
+                        updateNotesCard(cardView, notes);
                     }
                 })
                 .setNegativeButton(R.string.notes_cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        openNotes();
+                        openNotes(cardView, notes);
                     }
                 });
         AlertDialog dialog = builder.create();
         dialog.show();
     }
 
-    public void updateNotesCard(){
-        tv_notes.setText(mCity.getmNotes());
-        if (mCity.getmNotes().equals("")){
-            cv_notes.setVisibility(View.INVISIBLE);
+    //Updates notes card to display notes, or hide card if none saved
+    public void updateNotesCard(CardView cardView, TextView notes){
+        notes.setText(city.getmNotes());
+        if (city.getmNotes().equals("")){
+            cardView.setVisibility(View.INVISIBLE);
         }else{
-            cv_notes.setVisibility(View.VISIBLE);
+            cardView.setVisibility(View.VISIBLE);
         }
     }
 
-    //    private static final String MAPS_URL = "www.google.com/maps/search/";
-    //https://www.google.com/maps/search/?api=1&query=centurylink+field
-
+    //Opens Airport in Google Maps
     public void openMapsAirport(){
 
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/maps/search/?api=1&query=" + mCity.getmAirport()));
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/maps/search/?api=1&query=" + city.getmAirport()));
         Log.d(LOG_TAG, "Url = " + intent.getData());
         startActivity(intent);
     }
 
+    //Opens location in Google Maps
     public void openMaps(){
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/maps/search/?api=1&query=" + mCity.getmName()));
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/maps/search/?api=1&query=" + city.getmName()));
         Log.d(LOG_TAG, "Url = " + intent.getData());
         startActivity(intent);
     }

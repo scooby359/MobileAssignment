@@ -7,13 +7,16 @@
 
     <TextView
         android:id="@+id/tv_location_list_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:paddingBottom="8dp"
+        android:paddingEnd="8dp"
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/iv_location_list_favicon"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Location Name" />
@@ -24,7 +27,6 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:contentDescription="@string/fav_location"
-        android:tint="@color/fav_yellow"
         app:layout_constraintBottom_toBottomOf="@+id/tv_location_list_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_location_list_name"

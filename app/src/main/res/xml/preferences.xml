@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreference
+        android:title="@string/settings_temp"
+        android:key="@string/temp_key_celsius"
+        android:switchTextOn="@string/settings_c"
+        android:summaryOn="@string/settings_temp_celsius_on"
+        android:switchTextOff="@string/settings_f"
+        android:summaryOff="@string/settings_temp_celsius_off"
+        android:defaultValue="true"/>
+
+
+</PreferenceScreen>

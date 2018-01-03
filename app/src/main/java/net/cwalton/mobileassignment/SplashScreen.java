@@ -10,11 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
-import java.util.zip.Inflater;
-
 public class SplashScreen extends AppCompatActivity {
 
-    private int mHaveLocPermission;
+    private int haveLocPermission;
     private static final int PERMISSIONS_LOCATION_ID = 1;
     private static final String LOG_TAG = "SplashActivity";
 
@@ -23,21 +21,18 @@ public class SplashScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-        //Location bits
-        mHaveLocPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
-        Log.d(LOG_TAG, "Initial permission val = " + mHaveLocPermission);
+        //Check if we have location permission
+        haveLocPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+        Log.d(LOG_TAG, "Initial permission val = " + haveLocPermission);
 
 
         //If not, request
-        if (mHaveLocPermission != PackageManager.PERMISSION_GRANTED){
+        if (haveLocPermission != PackageManager.PERMISSION_GRANTED){
             //if we don't have permission
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSIONS_LOCATION_ID);
         }else{
             startApp();
         }
-
-        Log.d(LOG_TAG, "After request method permission val = " + mHaveLocPermission);
-
 
     }
 
@@ -45,15 +40,15 @@ public class SplashScreen extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        Log.d(LOG_TAG, "onResult permission val = " + mHaveLocPermission);
+        Log.d(LOG_TAG, "onResult permission val = " + haveLocPermission);
 
         switch (requestCode){
             case PERMISSIONS_LOCATION_ID: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     //permission granted
-                    mHaveLocPermission = PackageManager.PERMISSION_GRANTED;
+                    haveLocPermission = PackageManager.PERMISSION_GRANTED;
                 }else {
-                    mHaveLocPermission = PackageManager.PERMISSION_DENIED;
+                    haveLocPermission = PackageManager.PERMISSION_DENIED;
                 }
             }
         }
@@ -61,6 +56,7 @@ public class SplashScreen extends AppCompatActivity {
         startApp();
     }
 
+    //Launch main activity
     public void startApp(){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
@@ -7,20 +8,26 @@
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_home_black_24dp"
-            android:title="@string/nav_bar_home" />
+            android:title="@string/nav_bar_home"
+            android:checkable="false"/>
         <item
             android:id="@+id/nav_countries"
             android:icon="@drawable/ic_public_black_24dp"
-            android:title="@string/nav_bar_countries" />
+            android:title="@string/nav_bar_countries"
+            android:checkable="false"/>
         <item
             android:id="@+id/nav_cities"
             android:icon="@drawable/ic_location_city_black_24dp"
-            android:title="@string/nav_bar_cities" />
-
+            android:title="@string/nav_bar_cities"
+            android:checkable="false"/>
+        />
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_settings_black_24dp"
-            android:title="@string/nav_bar_settings"/>
+            android:title="@string/action_settings"
+            android:checkable="false"/>
+        />
+
     </group>
 
 </menu>

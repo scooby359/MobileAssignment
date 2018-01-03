@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -36,29 +35,29 @@ public class FragmentCountryList extends Fragment {
 
     private static final String LOG_TAG = "FragmentCountryList";
 
-    private Context mContext;
+    private Context context;
 
-    private List<Country> mCountries;
-    private ActivityComms mActivityComms;
-    private TravelDB mDb;
+    private List<Country> countries;
+    private ActivityComms activityComms;
+    private TravelDB db;
 
     private Switch sFavToggle;
     private EditText etSearch;
-    private ListView mListview;
-    private ListAdapter mAdapter;
+    private ListView listView;
+    private ListAdapter listAdapter;
 
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mContext = context;
-        mActivityComms = (ActivityComms)context;
+        this.context = context;
+        activityComms = (ActivityComms)context;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mActivityComms = null;
+        activityComms = null;
     }
 
     @Override
@@ -70,12 +69,10 @@ public class FragmentCountryList extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        //Get db and entries
-        mDb = new TravelDB(mContext);
-        mCountries = mDb.getAllCountries();
-
-        //Create view
+        //Setup view and get location information
         final View view = inflater.inflate(R.layout.fragment_country_list, container, false);
+        db = new TravelDB(context);
+        countries = db.getAllCountries();
 
         //Setup search box
         etSearch = view.findViewById(R.id.et_country_list_search);
@@ -87,7 +84,7 @@ public class FragmentCountryList extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 Log.d(LOG_TAG, "Text change = " + charSequence);
-                filter(charSequence.toString(), view);
+                filter(charSequence.toString(), view, sFavToggle.isChecked());
             }
 
             @Override
@@ -105,55 +102,38 @@ public class FragmentCountryList extends Fragment {
         });
 
         //Setup listview components and listener
-        mListview = view.findViewById(R.id.lv_country_list);
-        mAdapter = new customAdapter(view.getContext());
-        mListview.setAdapter(mAdapter);
-        mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                String selection = mCountries.get(position).getmName();
-                mActivityComms.onCountryListItemSelected(selection);
-            }
-        });
+        listView = view.findViewById(R.id.lv_country_list);
+        listAdapter = new customAdapter(view.getContext());
+        listView.setAdapter(listAdapter);
 
         //Setup listener for favourites switch
         sFavToggle = view.findViewById(R.id.s_fav_toggle);
         sFavToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                etSearch.setText("");
-                if (isChecked){
-                    //Stuck here - need to update adapter list
-                    mCountries.clear();
-                    mCountries = mDb.getFavouriteCountries();
-                    mAdapter = new customAdapter(view.getContext());
-                    mListview.setAdapter(mAdapter);
-                }else{
-                    mCountries.clear();
-                    mCountries = mDb.getAllCountries();
-                    mAdapter = new customAdapter(view.getContext());
-                    mListview.setAdapter(mAdapter);
-                }
+                countries.clear();
+                countries = db.filterCountries(etSearch.getText().toString(), sFavToggle.isChecked());
+                listAdapter = new customAdapter(view.getContext());
+                listView.setAdapter(listAdapter);
             }
         });
-
         return view;
     }
 
     //Get filtered search results
-    public void filter(String input, View view){
-        input = input.toLowerCase();
-        mCountries.clear();
-        mCountries = mDb.filterCountries(input);
-        mAdapter = new customAdapter(view.getContext());
-        mListview.setAdapter(mAdapter);
+    public void filter(String input, View view, Boolean favouritesOnly){
+        countries.clear();
+        countries = db.filterCountries(input, favouritesOnly);
+        listAdapter = new customAdapter(view.getContext());
+        listView.setAdapter(listAdapter);
     }
 
-    //http://www.vogella.com/tutorials/AndroidListView/article.html - for building custom list adapter
+    //http://www.vogella.com/tutorials/AndroidListView/article.html
+    // Setup custom list adapter
     public class customAdapter extends ArrayAdapter<Country> {
 
         public customAdapter(Context context) {
-            super(context, -1, mCountries);
+            super(context, -1, countries);
         }
 
         @NonNull
@@ -165,16 +145,37 @@ public class FragmentCountryList extends Fragment {
                 rowView = LayoutInflater.from(getContext()).inflate(R.layout.location_list_item, parent, false);
             }
 
-            TextView name = rowView.findViewById(R.id.tv_location_list_name);
-            ImageView favIcon = rowView.findViewById(R.id.iv_location_list_favicon);
+            final TextView name = rowView.findViewById(R.id.tv_location_list_name);
+            final ImageView favIcon = rowView.findViewById(R.id.iv_location_list_favicon);
 
-            name.setText(mCountries.get(position).getmName());
-            String fav = mCountries.get(position).getmFavourite();
+            name.setText(countries.get(position).getmName());
+            String fav = countries.get(position).getmFavourite();
 
             if (Location.LOC_FAV_FALSE.equals(fav)) {
-                favIcon.setVisibility(View.INVISIBLE);
+                favIcon.setColorFilter(getResources().getColor(R.color.fav_gray));
+            }else{
+                favIcon.setColorFilter(getResources().getColor(R.color.fav_yellow));
             }
 
+            name.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    activityComms.onCountryListItemSelected(name.getText().toString());
+                }
+            });
+
+            favIcon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    String response = db.toggleCountryFavourite(name.getText().toString());
+                    if (response.equals(Location.LOC_FAV_TRUE)){
+                        favIcon.setColorFilter(getResources().getColor(R.color.fav_yellow));
+                    }else {
+                        favIcon.setColorFilter(getResources().getColor(R.color.fav_gray));
+                    }
+                }
+            });
             return rowView;
         }
     }

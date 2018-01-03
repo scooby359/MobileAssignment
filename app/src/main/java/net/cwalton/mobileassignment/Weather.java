@@ -1,19 +1,14 @@
 package net.cwalton.mobileassignment;
 
-import android.content.Intent;
 import android.location.Location;
-import android.net.Uri;
 import android.util.Log;
-import android.util.Xml;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
 import java.net.URLEncoder;
-import java.nio.charset.Charset;
 
 /**
  * Created by scoob on 31/12/2017.
@@ -27,17 +22,21 @@ import java.nio.charset.Charset;
 public class Weather {
 
     private static final String LOG_TAG = "Weather";
-    private static String mCityName;
-    private static String mTemp;
-    private static String mCondition;
-    private static int mConditionCode;
-    private static int mIcon;
+    private static String cityName;
+    private static String temp;
+    private static String condition;
+    private static int conditionCode;
+    private static int icon;
 
     private static final String API = "&APPID=";
     private static final String API_KEY = "4e58a95dd52b09ca48d9e6f3d362bc8c";
 
     private static final String CENT = "&units=metric";
     private static final String FAR = "&units=imperial";
+    private String format;
+
+    private static final String CENT_SYMBOL = "°c";
+    private static final String FAR_SYMBOL = "°f";
 
     private static final String DAILY_BASE_URL = "http://api.openweathermap.org/data/2.5/forecast/daily?q=";
     private static final String THREE_DAYS = "&cnt=3";
@@ -47,13 +46,28 @@ public class Weather {
     private static final String LAT = "lat=";
     private static final String LON = "&lon=";
 
-    public String buildCurrentWeatherUrl(Location location){
-        String url = CURRENT_BASE_URL + LAT + location.getLatitude() + LON + location.getLongitude() + CENT + API + API_KEY;
+    //Build URL from location data
+    public String buildCurrentLocationWeatherUrl(Location location, Boolean useCelsius){
+
+        if (useCelsius){
+            format = CENT;
+        }else{
+            format = FAR;
+        }
+
+        String url = CURRENT_BASE_URL + LAT + location.getLatitude() + LON + location.getLongitude() + format + API + API_KEY;
         Log.d("Weather","Url = " + url);
         return url;
     }
 
-    public String buildCityWeather(String city, String country){
+    //Build url from City name
+    public String buildCityWeatherUrl(String city, String country, Boolean useCelsius){
+
+        if (useCelsius){
+            format = CENT;
+        }else{
+            format = FAR;
+        }
 
         try {
             city = URLEncoder.encode(city, "UTF-8");
@@ -62,7 +76,7 @@ public class Weather {
             e.printStackTrace();
         }
 
-        String url = CURRENT_BASE_URL + "q=" + city + "," + country + CENT + API + API_KEY;
+        String url = CURRENT_BASE_URL + "q=" + city + "," + country + format + API + API_KEY;
 
         Log.d("Weather","Url = " + url);
         return url;
@@ -73,7 +87,8 @@ public class Weather {
     }
 
     //http://android-er.blogspot.co.uk/2015/10/android-query-current-weather-using.html
-    public void parseCurrentWeatherResponse(JSONObject response){
+    //Parse JSON response and save details
+    public void parseCurrentWeatherResponse(JSONObject response, Boolean celsius){
 
         String name = null;
         String temp = null;
@@ -114,11 +129,15 @@ public class Weather {
                 //Convert to int and back to string to lose decimal value easily
                 float tempFloat = Float.parseFloat(temp);
                 int tempInt = Math.round(tempFloat);
-                mTemp = Integer.toString(tempInt);
-                mCityName = name;
-                mCondition = condition;
-                mConditionCode = Integer.parseInt(code);
-                setIcon(mConditionCode);
+                if (celsius){
+                    Weather.temp = Integer.toString(tempInt) + CENT_SYMBOL;
+                }else {
+                    Weather.temp = Integer.toString(tempInt) + FAR_SYMBOL;
+                }
+                cityName = name;
+                Weather.condition = condition;
+                conditionCode = Integer.parseInt(code);
+                setIcon(conditionCode);
             }
         }
     }
@@ -154,43 +173,45 @@ public class Weather {
 
     }
 
+    //Set weather icon from condition code
     private void setIcon(int code){
 
         if (code >= 200 && code <= 232){
-            mIcon = R.drawable.ic_weather_lightning;
+            icon = R.drawable.ic_weather_lightning;
         }else if (code >= 300 && code <= 321){
-            mIcon = R.drawable.ic_weather_rainy;
+            icon = R.drawable.ic_weather_rainy;
         }else if (code >= 500 && code <= 531){
-            mIcon = R.drawable.ic_weather_pouring;
+            icon = R.drawable.ic_weather_pouring;
         }else if (code >= 600 && code <= 622){
-            mIcon = R.drawable.ic_weather_snowy;
+            icon = R.drawable.ic_weather_snowy;
         }else if (code >= 701 && code <= 781){
-            mIcon = R.drawable.ic_weather_fog;
+            icon = R.drawable.ic_weather_fog;
         }else if (code == 800){
-            mIcon = R.drawable.ic_weather_sunny;
+            icon = R.drawable.ic_weather_sunny;
         }else if (code >= 801 && code <= 804){
-            mIcon = R.drawable.ic_weather_cloudy;
+            icon = R.drawable.ic_weather_cloudy;
         }else if (code >= 900 && code <= 906){
-            mIcon = R.drawable.ic_weather_lightning;
+            icon = R.drawable.ic_weather_lightning;
         }else{
             Log.d(LOG_TAG,"Condition unknown - defaulting icon");
-            mIcon = R.drawable.ic_weather_lightning;
+            icon = R.drawable.ic_weather_lightning;
         }
     }
 
     public String getmCityName() {
-        return mCityName;
+        return cityName;
     }
+
     public String getmCondition() {
-        return mCondition;
+        return condition;
     }
 
     public String getmTemp() {
-        return mTemp;
+        return temp;
     }
 
     public int getmIcon() {
-        return mIcon;
+        return icon;
     }
 }
 

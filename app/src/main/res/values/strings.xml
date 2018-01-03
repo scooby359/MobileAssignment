@@ -57,5 +57,19 @@
     <string name="therm_icon">Themometer Icon</string>
     <string name="home_button_cities">Cities</string>
     <string name="home_button_countries">Countries</string>
+    <string name="home_fave_card_title">Favourites</string>
+    <string name="home_add_faves">Add some favourites to see them here!</string>
+    <string name="home_city_button">CITIES</string>
+    <string name="city_icon">City Icon</string>
+    <string name="country_icon">Country Icon</string>
+    <string name="home_country_button">COUNTRIES</string>
+
+    <string name="settings_temp">Use Celsius</string>
+    <string name="temp_key_celsius">temp_celsius</string>
+    <string name="settings_c">Celsius</string>
+    <string name="settings_f">Farenheit</string>
+
+    <string name="settings_temp_celsius_off">Temperatures shown in farenheit</string>
+    <string name="settings_temp_celsius_on">Temperatures shown in celsius</string>
 
 </resources>

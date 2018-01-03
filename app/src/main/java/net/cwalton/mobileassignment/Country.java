@@ -41,13 +41,5 @@ public class Country extends Location {
         return mCountryCode;
     }
 
-    public String[] getmCities() {
-        return mCities;
-    }
-
-    public void setmCities(String[] mCities) {
-        this.mCities = mCities;
-    }
-
 }
 

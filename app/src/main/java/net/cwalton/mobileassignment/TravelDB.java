@@ -339,14 +339,24 @@ public class TravelDB extends SQLiteOpenHelper {
     }
 
     //Return a list of countries which have a given string in the country name
-    public List<Country> filterCountries(String input){
+    public List<Country> filterCountries(String input, Boolean favouritesOnly){
         //get instance of db
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
 
-        //create query
-        String query = "SELECT * FROM " + TABLE_COUNTRIES +
-                " WHERE " + COLUMN_COUNTY_NAME + " LIKE \"" + input + "%\"" +
-                " ORDER BY " + COLUMN_COUNTY_NAME + " ASC;";
+        String query;
+
+        if (favouritesOnly){
+            query = "SELECT * FROM " + TABLE_COUNTRIES +
+                    " WHERE " + COLUMN_COUNTY_NAME + " LIKE \"" + input + "%\"" +
+                    " AND " + COLUMN_COUNTRY_FAVOURITE + " = \"" + Location.LOC_FAV_TRUE  +
+                    "\" ORDER BY " + COLUMN_COUNTY_NAME + " ASC;";
+
+        }else{
+            query = "SELECT * FROM " + TABLE_COUNTRIES +
+                    " WHERE " + COLUMN_COUNTY_NAME + " LIKE \"" + input + "%\"" +
+                    " ORDER BY " + COLUMN_COUNTY_NAME + " ASC;";
+        }
+
 
         Log.d(LOG_TAG, "DB country query = " + query);
 
@@ -369,14 +379,25 @@ public class TravelDB extends SQLiteOpenHelper {
     }
 
     //Return a list of cities which have a given string in the city name
-    public List<City> filterCities(String input){
+    public List<City> filterCities(String input, Boolean favouritesOnly){
         //get instance of db
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
 
+        String query;
+
+        if (favouritesOnly){
+            query = "SELECT * FROM " + TABLE_CITIES +
+                    " WHERE " + COLUMN_CITY_NAME + " LIKE \"" + input + "%\"" +
+                    " AND " + COLUMN_CITY_FAVOURITE + " = \"" + Location.LOC_FAV_TRUE  +
+                    "\" ORDER BY " + COLUMN_CITY_NAME + " ASC;";
+
+        }else{
+            query = "SELECT * FROM " + TABLE_CITIES +
+                    " WHERE " + COLUMN_CITY_NAME + " LIKE \"" + input + "%\"" +
+                    " ORDER BY " + COLUMN_CITY_NAME + " ASC;";
+        }
+
         //create query
-        String query = "SELECT * FROM " + TABLE_CITIES +
-                " WHERE " + COLUMN_CITY_NAME + " LIKE \"" + input + "%\"" +
-                " ORDER BY " + COLUMN_CITY_NAME + " ASC;";
 
         Log.d(LOG_TAG, "DB country query = " + query);
 
@@ -398,7 +419,6 @@ public class TravelDB extends SQLiteOpenHelper {
         return cities;
     }
 
-    //Todo - city and country filter && favourites to fix error in listview when searching while faourites on
 
     //Return a list of favourite countries
     public List<Country> getFavouriteCountries(){
@@ -596,8 +616,13 @@ public class TravelDB extends SQLiteOpenHelper {
 
     //Return a list of all favourite locations - countries and cities
     public List<Location> getAllFavourites(){
-        //todo add all favourites method
-        return null;
+
+        List<Location> allFavourites = new ArrayList<>();
+
+        allFavourites.addAll(getFavouriteCities());
+        allFavourites.addAll(getFavouriteCountries());
+
+        return allFavourites;
     }
 
 }

@@ -61,7 +61,4 @@ public class Location {
         this.mNotes = mNotes;
     }
 
-    public void debugLog(){
-        Log.d("Location", "" + mName + ". Fave = " + mFavourite);
-    }
 }

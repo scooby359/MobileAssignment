@@ -1,8 +1,6 @@
 package net.cwalton.mobileassignment;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,7 +10,6 @@ import android.os.Bundle;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -33,88 +29,118 @@ public class FragmentCountry extends Fragment {
 
     private static final String LOG_TAG = "FragmentCountry";
 
-    private Context mContext;
-
+    private Context context;
     private TravelDB db;
     private Country country;
-    private String mLocationArg;
+    private String locationArg;
 
-    private TextView tv_name;
-    private TextView tv_language;
-    private TextView tv_currency;
-    private TextView tv_capital;
-    private TextView tv_maincities;
-    private ImageButton ib_favourite;
-    private ImageButton ib_wiki;
-    private ImageButton ib_notes;
-    private ImageButton ib_map;
-    private CardView cv_notes;
-    private TextView tv_notes;
+    private ActivityComms activityComms;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mContext = context;
+        this.context = context;
+        activityComms = (ActivityComms)context;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        //Setup view and get location information
         View view = inflater.inflate(R.layout.fragment_country, container, false);
-        mLocationArg = getArguments().getString(Location.FRAG_LOCATION_NAME);
+        locationArg = getArguments().getString(Location.FRAG_LOCATION_NAME);
+        db = new TravelDB(context);
+        country = db.getCountry(locationArg);
+        final List<City> cities = db.getMainCities(locationArg);
 
-        db = new TravelDB(mContext);
-        country = db.getCountry(mLocationArg);
+        //get refs to layout objects
+        final TextView tvName = view.findViewById(R.id.tv_country_name);
+        final TextView tvLanguage = view.findViewById(R.id.tv_country_language);
+        final TextView tvCurrency = view.findViewById(R.id.tv_country_currency);
+        final TextView tvCapital = view.findViewById(R.id.tv_country_capital);
+        final ImageButton ibFavourite = view.findViewById(R.id.ib_country_favourite);
+        final ImageButton ibWiki = view.findViewById(R.id.ib_country_wiki);
+        final ImageButton ibNotes = view.findViewById(R.id.ib_country_notes);
+        final CardView cvNotes = view.findViewById(R.id.cv_country_notes);
+        final TextView tvNotes = view.findViewById(R.id.tv_country_notes);
+        final ImageButton ibMap = view.findViewById(R.id.ib_country_map);
+        final TextView tvCity1 = view.findViewById(R.id.tv_country_city1);
+        final TextView tvCity2 = view.findViewById(R.id.tv_country_city2);
+        final TextView tvCity3 = view.findViewById(R.id.tv_country_city3);
+        final TextView tvCity4 = view.findViewById(R.id.tv_country_city4);
+        final TextView tvCity5 = view.findViewById(R.id.tv_country_city5);
 
-        tv_name = view.findViewById(R.id.tv_country_name);
-        tv_language = view.findViewById(R.id.tv_country_language);
-        tv_currency = view.findViewById(R.id.tv_country_currency);
-        tv_capital = view.findViewById(R.id.tv_country_capital);
-        tv_maincities = view.findViewById(R.id.tv_country_maincities);
-        ib_favourite = view.findViewById(R.id.ib_country_favourite);
-        ib_wiki = view.findViewById(R.id.ib_country_wiki);
-        ib_notes = view.findViewById(R.id.ib_country_notes);
-        cv_notes = view.findViewById(R.id.cv_country_notes);
-        tv_notes = view.findViewById(R.id.tv_country_notes);
-        ib_map = view.findViewById(R.id.ib_country_map);
+        //Set properties of layout objects
+        tvName.setText(country.getmName());
+        tvLanguage.setText(country.getmLanguage());
+        tvCurrency.setText(country.getmCurrency());
+        tvCapital.setText(country.getmCapital());
+        updateNotesCard(cvNotes, tvNotes);
+        tvCity1.setText(cities.get(0).getmName());
+        tvCity2.setText(cities.get(1).getmName());
+        tvCity3.setText(cities.get(2).getmName());
+        tvCity4.setText(cities.get(3).getmName());
+        tvCity5.setText(cities.get(4).getmName());
+        updateFavIcon(ibFavourite);
 
-        tv_name.setText(country.getmName());
-        tv_language.setText(country.getmLanguage());
-        tv_currency.setText(country.getmCurrency());
-        tv_capital.setText(country.getmCapital());
-
-        updateNotesCard();
-
-        //todo - should probably be interactive to allow jumping straight to city page
-        List<City> cities = db.getMainCities(mLocationArg);
-        for (int i = 0; i < cities.size(); i++){
-            tv_maincities.append(cities.get(i).getmName()+"\n");
-        }
-
-        updateFavIcon();
-
-        ib_favourite.setOnClickListener(new View.OnClickListener() {
+        //set onclick listeners for buttons
+        tvCity1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toggleFavourite();
+                activityComms.onCityListItemSelected(cities.get(0).getmName());
             }
         });
 
-        ib_wiki.setOnClickListener(new View.OnClickListener() {
+        tvCity2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                activityComms.onCityListItemSelected(cities.get(1).getmName());
+            }
+        });
+
+        tvCity3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                activityComms.onCityListItemSelected(cities.get(2).getmName());
+            }
+        });
+
+        tvCity4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                activityComms.onCityListItemSelected(cities.get(3).getmName());
+            }
+        });
+
+        tvCity5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                activityComms.onCityListItemSelected(cities.get(4).getmName());
+            }
+        });
+
+        ibFavourite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toggleFavourite(ibFavourite);
+            }
+        });
+
+        ibWiki.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openWebPage();
             }
         });
 
-        ib_notes.setOnClickListener(new View.OnClickListener() {
+        ibNotes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openNotes();
+                openNotes(cvNotes, tvNotes);
             }
         });
 
-        ib_map.setOnClickListener(new View.OnClickListener() {
+        ibMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openMaps();
@@ -123,9 +149,10 @@ public class FragmentCountry extends Fragment {
         return view;
     }
 
-    public void toggleFavourite(){
+    //Checks favourite status and updates database
+    public void toggleFavourite(ImageButton button){
         Log.d(LOG_TAG, "Toggle Favourite called");
-        String response = db.toggleCountryFavourite(mLocationArg);
+        String response = db.toggleCountryFavourite(locationArg);
         if (response.equals(Location.LOC_FAV_TRUE)){
             country.setmFavourite(Location.LOC_FAV_TRUE);
             Log.d(LOG_TAG,"set fave");
@@ -133,23 +160,24 @@ public class FragmentCountry extends Fragment {
             country.setmFavourite(Location.LOC_FAV_FALSE);
             Log.d(LOG_TAG,"remove fave");
         }
-        updateFavIcon();
-        Toast.makeText(getActivity(), response, Toast.LENGTH_SHORT).show();
+        updateFavIcon(button);
     }
 
-    public void updateFavIcon(){
+    //Updates favourite icon
+    public void updateFavIcon(ImageButton button){
         Log.d(LOG_TAG,"update fave icon called");
         Log.d(LOG_TAG, "Fav value is " + country.getmFavourite());
 
         if (country.getmFavourite().equals(Location.LOC_FAV_TRUE)){
             Log.d(LOG_TAG, "Fav = true");
-            ib_favourite.setImageResource(R.drawable.ic_star_white_24dp);
+            button.setImageResource(R.drawable.ic_star_white_24dp);
         }else{
             Log.d(LOG_TAG, "Fav = false");
-            ib_favourite.setImageResource(R.drawable.ic_star_border_white_24dp);
+            button.setImageResource(R.drawable.ic_star_border_white_24dp);
         }
     }
 
+    //Open custom Chrome tab to location Wikipedia page
     public void openWebPage(){
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
         builder.setToolbarColor(ContextCompat.getColor(getActivity(), R.color.colorPrimary));
@@ -157,69 +185,72 @@ public class FragmentCountry extends Fragment {
         customTabsIntent.launchUrl(getActivity(), Uri.parse(country.getmWikiUrl()));
     }
 
-    public void openNotes(){
+    //Opens a dialog popup to view, edit and delete notes
+    public void openNotes(final CardView card, final TextView notes){
 
         //todo - use custom layout so margins can be set
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        final EditText et_notes = new EditText(getActivity());
-        et_notes.setText(country.getmNotes());
+        final EditText etNotes = new EditText(getActivity());
+        etNotes.setText(country.getmNotes());
 
-        builder.setView(et_notes);
+        builder.setView(etNotes);
         String title = getString(R.string.notes_title) + " " + country.getmName();
         builder.setTitle(title);
         builder.setPositiveButton(R.string.notes_ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                String userInput = et_notes.getText().toString();
-                db.updateCountryNotes(mLocationArg, userInput);
+                String userInput = etNotes.getText().toString();
+                db.updateCountryNotes(locationArg, userInput);
                 country.setmNotes(userInput);
-                updateNotesCard();
+                updateNotesCard(card, notes);
             }})
             .setNegativeButton(R.string.notes_delete, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-            confirmDeleteNote();
+            confirmDeleteNote(card, notes);
             }
                       });
         AlertDialog dialog = builder.create();
         dialog.show();
     }
 
-    public void confirmDeleteNote(){
+    //Opens a dialog to confirm user wants to delete notes then updates db
+    public void confirmDeleteNote(final CardView card, final TextView notes){
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(R.string.notes_delete_confirm)
                 .setPositiveButton(R.string.notes_delete, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        db.updateCountryNotes(mLocationArg, "");
+                        db.updateCountryNotes(locationArg, "");
                         country.setmNotes("");
-                        updateNotesCard();
+                        updateNotesCard(card, notes);
                     }
                 })
                 .setNegativeButton(R.string.notes_cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        openNotes();
+                        openNotes(card, notes);
                     }
                 });
         AlertDialog dialog = builder.create();
         dialog.show();
     }
 
-    public void updateNotesCard(){
-        tv_notes.setText(country.getmNotes());
+    //Updates notes card to display notes, or hide card if none saved
+    public void updateNotesCard(CardView card, TextView notes){
+        notes.setText(country.getmNotes());
         if (country.getmNotes().equals("")){
-            cv_notes.setVisibility(View.INVISIBLE);
+            card.setVisibility(View.INVISIBLE);
         }else{
-            cv_notes.setVisibility(View.VISIBLE);
+            card.setVisibility(View.VISIBLE);
         }
     }
 
+    //Opens location in Google Maps
     public void openMaps(){
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/maps/search/?api=1&query=" + country.getmName()));
         Log.d(LOG_TAG, "Url = " + intent.getData());
         startActivity(intent);
     }
-
 }
