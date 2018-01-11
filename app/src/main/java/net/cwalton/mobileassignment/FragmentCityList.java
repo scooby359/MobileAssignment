@@ -148,7 +148,9 @@ public class FragmentCityList extends Fragment {
             final TextView name = rowView.findViewById(R.id.tv_location_list_name);
             final ImageView favIcon = rowView.findViewById(R.id.iv_location_list_favicon);
 
-            name.setText(cities.get(position).getName());
+            final City rowCity = cities.get(position);
+
+            name.setText(rowCity.getName() + ", " + rowCity.getCountry());
             String fav = cities.get(position).getFavourite();
 
             if (Location.LOC_FAV_FALSE.equals(fav)) {
@@ -160,7 +162,7 @@ public class FragmentCityList extends Fragment {
             name.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    activityComms.onCityListItemSelected(name.getText().toString());
+                    activityComms.onCityListItemSelected(rowCity.getName());
                 }
             });
 
@@ -168,7 +170,7 @@ public class FragmentCityList extends Fragment {
                 @Override
                 public void onClick(View view) {
 
-                    String response = db.toggleCityFavourite(name.getText().toString());
+                    String response = db.toggleCityFavourite(rowCity.getName());
                     if (response.equals(Location.LOC_FAV_TRUE)){
                         favIcon.setColorFilter(getResources().getColor(R.color.fav_yellow));
                     }else {
